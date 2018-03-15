@@ -1,22 +1,21 @@
-package com.example.first;
+package com.modules.sys.controller;
 
+import com.modules.sys.entity.User;
+import com.modules.sys.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.ui.Model;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @RestController
-@SpringBootApplication
-public class FirstApplication {
+@RequestMapping("/user")
+public class UserController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(FirstApplication.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
-    public static void main(String[] args) {
-        SpringApplication.run(FirstApplication.class, args);
-    }
+    @Autowired
+    private UserService userService;
 
     /**
      * post 方法，通过 @RequestParam 绑定参数值
@@ -51,4 +50,15 @@ public class FirstApplication {
         return modelAndView;
     }
 
+
+    @RequestMapping(value = "/add", produces = {"application/json;charset=UTF-8"})
+    public int addUser(User user){
+        return userService.addUser(user);
+    }
+
+    @RequestMapping(value = "/all/{pageNum}/{pageSize}", produces = {"application/json;charset=UTF-8"})
+    public Object findAllUser(@PathVariable("pageNum") int pageNum, @PathVariable("pageSize") int pageSize){
+
+        return userService.findAllUser(pageNum,pageSize);
+    }
 }
