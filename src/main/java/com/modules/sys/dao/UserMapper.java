@@ -1,9 +1,11 @@
 package com.modules.sys.dao;
 
 import com.modules.sys.entity.User;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 
+@Mapper
 public interface UserMapper {
     int deleteByPrimaryKey(String id);
 
