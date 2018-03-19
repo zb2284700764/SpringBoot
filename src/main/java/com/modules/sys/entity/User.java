@@ -1,47 +1,25 @@
 package com.modules.sys.entity;
 
+import com.common.persistence.DataEntity;
+
 import java.io.Serializable;
 import java.util.Date;
 
-public class User implements Serializable {
-    private String id;
-
-    private String loginName;
-
-    private String password;
-
-    private String name;
-
-    private String loginFlag;
-
-    private String createBy;
-
-    private Date createDate;
-
-    private String updateBy;
-
-    private Date updateDate;
-
-    private String remarks;
-
-    private String delFlag;
+public class User extends DataEntity<User> {
 
     private static final long serialVersionUID = 1L;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id == null ? null : id.trim();
-    }
+    private String loginName;
+    private String password;
+    private String name;
+    private String loginFlag;
 
     public String getLoginName() {
         return loginName;
     }
 
     public void setLoginName(String loginName) {
-        this.loginName = loginName == null ? null : loginName.trim();
+        this.loginName = loginName;
     }
 
     public String getPassword() {
@@ -49,7 +27,7 @@ public class User implements Serializable {
     }
 
     public void setPassword(String password) {
-        this.password = password == null ? null : password.trim();
+        this.password = password;
     }
 
     public String getName() {
@@ -57,7 +35,7 @@ public class User implements Serializable {
     }
 
     public void setName(String name) {
-        this.name = name == null ? null : name.trim();
+        this.name = name;
     }
 
     public String getLoginFlag() {
@@ -65,54 +43,6 @@ public class User implements Serializable {
     }
 
     public void setLoginFlag(String loginFlag) {
-        this.loginFlag = loginFlag == null ? null : loginFlag.trim();
-    }
-
-    public String getCreateBy() {
-        return createBy;
-    }
-
-    public void setCreateBy(String createBy) {
-        this.createBy = createBy == null ? null : createBy.trim();
-    }
-
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-
-    public String getUpdateBy() {
-        return updateBy;
-    }
-
-    public void setUpdateBy(String updateBy) {
-        this.updateBy = updateBy == null ? null : updateBy.trim();
-    }
-
-    public Date getUpdateDate() {
-        return updateDate;
-    }
-
-    public void setUpdateDate(Date updateDate) {
-        this.updateDate = updateDate;
-    }
-
-    public String getRemarks() {
-        return remarks;
-    }
-
-    public void setRemarks(String remarks) {
-        this.remarks = remarks == null ? null : remarks.trim();
-    }
-
-    public String getDelFlag() {
-        return delFlag;
-    }
-
-    public void setDelFlag(String delFlag) {
-        this.delFlag = delFlag == null ? null : delFlag.trim();
+        this.loginFlag = loginFlag;
     }
 }

@@ -1,16 +1,21 @@
 package com.modules.sys.controller;
 
+import com.common.controller.BaseController;
 import com.modules.sys.entity.User;
 import com.modules.sys.service.UserService;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("/user")
-public class UserController {
+@RequestMapping("${adminPath}/sys/user")
+public class UserController extends BaseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
@@ -27,7 +32,7 @@ public class UserController {
     @RequestMapping(value = "/index1", method = RequestMethod.POST)
     public ModelAndView index1(@RequestParam("name") String name, ModelAndView modelAndView) {
         modelAndView.addObject("name", name);
-        modelAndView.setViewName("hello");
+        modelAndView.setViewName("modules/sys/hello");
         LOGGER.info("使用logback测试日志记录1");
         return modelAndView;
     }
@@ -45,20 +50,101 @@ public class UserController {
     public ModelAndView index2(@PathVariable String username, @PathVariable String password, ModelAndView modelAndView) {
         modelAndView.addObject("username", username);
         modelAndView.addObject("password", password);
-        modelAndView.setViewName("hello2");
+        modelAndView.setViewName("modules/sys/hello2");
         LOGGER.info("使用logback测试日志记录2");
         return modelAndView;
     }
 
 
-    @RequestMapping(value = "/add", produces = {"application/json;charset=UTF-8"})
-    public int addUser(User user){
-        return userService.addUser(user);
+    @RequestMapping("/index3")
+    public ModelAndView index3(@PathVariable String username, @PathVariable String password, ModelAndView modelAndView) {
+        modelAndView.addObject("username", username);
+        modelAndView.addObject("password", password);
+        modelAndView.setViewName("modules/sys/hello2");
+        LOGGER.info("使用logback测试日志记录2");
+        return modelAndView;
     }
 
-    @RequestMapping(value = "/all/{pageNum}/{pageSize}", produces = {"application/json;charset=UTF-8"})
-    public Object findAllUser(@PathVariable("pageNum") int pageNum, @PathVariable("pageSize") int pageSize){
 
-        return userService.findAllUser(pageNum,pageSize);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * 增加用户
+     * @param user
+     * @return
+     */
+    @RequiresPermissions("add")
+    @RequestMapping("save")
+    public String save(User user) {
+
+        System.out.println("save user");
+
+//		SystemService.entryptPassword(user.getPassword());
+        System.out.println("增加成功");
+
+        return "redirect:" + adminPath + "/sys/user/findAllUser";
+    }
+
+    /**
+     * 跳转到增加用户页面
+     * @date 2017年9月19日 下午2:20:59
+     */
+    @RequestMapping("gotoUserForm")
+    public String gotoUserForm() {
+
+        System.out.println("gotoUserForm");
+
+        return "ssm/modules/sys/userForm";
+    }
+
+    /**
+     * 查询所有用户
+     * @param model
+     * @date 2017年9月18日 下午5:20:40
+     */
+    @RequestMapping("findAllUser")
+    public String findAllUser(Model model) {
+        List<User> userList = userService.findAllUser();
+        model.addAttribute("userList", userList);
+        return "ssm/modules/sys/userList";
     }
 }
