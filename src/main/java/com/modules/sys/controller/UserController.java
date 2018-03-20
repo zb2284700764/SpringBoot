@@ -113,7 +113,7 @@ public class UserController extends BaseController {
      * @return
      */
     @RequiresPermissions("add")
-    @RequestMapping("save")
+    @RequestMapping("/save")
     public String save(User user) {
 
         System.out.println("save user");
@@ -128,23 +128,26 @@ public class UserController extends BaseController {
      * 跳转到增加用户页面
      * @date 2017年9月19日 下午2:20:59
      */
-    @RequestMapping("gotoUserForm")
-    public String gotoUserForm() {
+    @RequestMapping("/gotoUserForm")
+    public ModelAndView gotoUserForm(ModelAndView modelAndView) {
 
         System.out.println("gotoUserForm");
 
-        return "ssm/modules/sys/userForm";
+        List<User> userList = userService.findAllUser();
+        modelAndView.setViewName("modules/sys/userForm");
+        return modelAndView;
     }
 
     /**
      * 查询所有用户
-     * @param model
+     * @param modelAndView
      * @date 2017年9月18日 下午5:20:40
      */
-    @RequestMapping("findAllUser")
-    public String findAllUser(Model model) {
+    @RequestMapping("/findAllUser")
+    public ModelAndView findAllUser(ModelAndView modelAndView) {
         List<User> userList = userService.findAllUser();
-        model.addAttribute("userList", userList);
-        return "ssm/modules/sys/userList";
+        modelAndView.addObject("userList", userList);
+        modelAndView.setViewName("modules/sys/userList");
+        return modelAndView;
     }
 }

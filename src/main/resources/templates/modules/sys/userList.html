@@ -1,0 +1,73 @@
+
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="decorator" content="default"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap -->
+    <link th:href="@{/bootstrap/3.3.7/css/bootstrap.css}" rel="stylesheet" type="text/css">
+    <script th:src="@{/bootstrap/3.3.7/js/bootstrap.js}"></script>
+
+    <!-- Jquery -->
+    <script th:src="@{/jquery/1.12/jquery-1.12.4.js}"></script>
+
+    <title>用户列表</title>
+</head>
+<body>
+
+<body>
+    <div class="container-fluid">
+
+        <h4>用户列表</h4>
+
+        <table class="table table-bordered">
+            <tr>
+                <td>ID</td>
+                <td>登录名</td>
+                <td>密码</td>
+                <td>姓名</td>
+                <td>是否禁止登录</td>
+                <td>操作</td>
+            </tr>
+            <tr th:each="user,userStat : ${userList}">
+                <td th:text="${user.id }" />
+                <td th:text="${user.loginName }" />
+                <td th:text="${user.password }" />
+                <td th:text="${user.name }" />
+                <td th:text="${user.loginFlag eq 0 ? '否' : '是' }" />
+                <td>
+                    <button type="button" class="btn btn-primary btn-xs">修改</button>
+                    <button type="button" class="btn btn-danger btn-xs">删除</button>
+
+                    <th:block th:if="${user.loginFlag eq 0 }">
+                        <button type="button" class="btn btn-link btn-xs">禁用</button>
+                    </th:block>
+                    <th:block th:if="${user.loginFlag eq 1 }">
+                        <button type="button" class="btn btn-link btn-xs">启用</button>
+                    </th:block>
+
+                </td>
+            </tr>
+        </table>
+
+        <div>
+            <form th:action="@{/a/sys/user/gotoUserForm}" th:method="post">
+                <button id="addUserBtn" type="submit" class="btn btn-default">增加用户</button>
+            </form>
+        </div>
+
+        <div>
+            <button type="button" class="btn btn-default">Default</button>
+            <button type="button" class="btn btn-primary btn-xs">Primary</button>
+            <button type="button" class="btn btn-success btn-sm">Success</button>
+            <button type="button" class="btn btn-info btn-lg">Info</button>
+            <button type="button" class="btn btn-warning">Warning</button>
+            <button type="button" class="btn btn-danger">Danger</button>
+            <button type="button" class="btn btn-link">Link</button>
+            <button type="button" class="btn btn-primary" disabled="disabled">Primary button</button>
+            <button type="button" class="btn btn-default" disabled="disabled">Button</button>
+        </div>
+    </div>
+</body>
+</html>

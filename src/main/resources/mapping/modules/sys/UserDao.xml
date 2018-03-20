@@ -39,8 +39,8 @@
   </select>
 
   <!-- 查询所有用户 -->
-  <select id="findAllList" resultType="com.modules.sys.entity.User">
-    SELECT <include refid="userColumns" /> FROM user a
+  <select id="findAllUser" resultType="com.modules.sys.entity.User">
+    SELECT <include refid="userColumns" /> FROM sys_user a
   </select>
 
 </mapper>

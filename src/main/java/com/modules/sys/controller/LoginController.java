@@ -36,7 +36,7 @@ public class LoginController extends BaseController {
 			// 转发到 UserController 查询用户列表
 			return "redirect:" + adminPath + "/sys/user/findAllUser";
 		} else {
-			return "ssm/modules/sys/login";
+			return "modules/sys/login";
 		}
 	}
 
