@@ -16,13 +16,11 @@ public class LoginController extends BaseController {
 
 	/**
 	 * 登录
-	 * @param username
-	 * @param password
 	 * @param model
 	 * @date 2017年7月10日 下午4:27:19
 	 */
 	@RequestMapping(value = "${adminPath}/login")
-	public String login(String username, String password, Model model) {
+	public String login(Model model) {
 		
 //		UsernamePasswordToken token = new UsernamePasswordToken(loginName, password);
 		Subject subject = SecurityUtils.getSubject();
@@ -36,7 +34,7 @@ public class LoginController extends BaseController {
 			// 转发到 UserController 查询用户列表
 			return "redirect:" + adminPath + "/sys/user/findAllUser";
 		} else {
-			return "modules/sys/login";
+			return "sys/login";
 		}
 	}
 
@@ -52,7 +50,7 @@ public class LoginController extends BaseController {
 	public String loginOut(String loginName, String password, Model model) {
 		Subject subject = SecurityUtils.getSubject();
 		subject.logout();
-		return "ssm/modules/sys/login";
+		return "sys/login";
 	}
 
 
@@ -76,7 +74,7 @@ public class LoginController extends BaseController {
 	@RequestMapping("${adminPath}/defaultIndex")
 	public String defaultIndex(){
 
-		return "ssm/modules/sys/defaultIndex";
+		return "sys/defaultIndex";
 	}
 }
 

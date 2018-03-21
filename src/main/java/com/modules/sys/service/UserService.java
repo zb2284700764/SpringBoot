@@ -1,5 +1,6 @@
 package com.modules.sys.service;
 
+import com.common.service.CrudService;
 import com.modules.sys.dao.UserDao;
 import com.modules.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,12 +9,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class UserService {
+public class UserService extends CrudService<UserDao, User> {
 
-    public int a = 0;
-
-    @Autowired
-    private UserDao userDao;
 
     /**
      * 通过登录名获取用户信息
@@ -28,7 +25,7 @@ public class UserService {
      */
     public User getUserByLoginName(String loginName) {
 
-        return userDao.getUserByLoginName(loginName);
+        return dao.getUserByLoginName(loginName);
     }
 
     /**
@@ -42,7 +39,7 @@ public class UserService {
      * @history
      */
     public List<User> findAllUser(){
-        return userDao.findAllUser();
+        return dao.findAllUser();
     }
 
 }

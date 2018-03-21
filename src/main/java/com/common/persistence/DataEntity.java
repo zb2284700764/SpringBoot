@@ -4,6 +4,7 @@
 package com.common.persistence;
 
 import com.common.util.IdGen;
+import com.common.util.StringUtils;
 import com.modules.sys.entity.User;
 
 import java.util.Date;
@@ -44,11 +45,11 @@ public abstract class DataEntity<T> extends BaseEntity<T> {
 			setId(IdGen.uuid());
 		}
 		// FIXME 需要从登录的缓存中获取用户信息
-//		User user = null;
-//		if (user != null && StringUtils.isNotBlank(user.getId())){
-//			this.updateBy = user;
-//			this.createBy = user;
-//		}
+		User user = null;
+		if (user != null && StringUtils.isNotBlank(user.getId())){
+			this.updateBy = user;
+			this.createBy = user;
+		}
 		this.updateDate = new Date();
 		this.createDate = this.updateDate;
 	}
@@ -59,10 +60,10 @@ public abstract class DataEntity<T> extends BaseEntity<T> {
 	@Override
 	public void preUpdate(){
 		// FIXME 需要从登录的缓存中获取用户信息
-//		User user = null;
-//		if (user != null && StringUtils.isNotBlank(user.getId())){
-//			this.updateBy = user;
-//		}
+		User user = null;
+		if (user != null && StringUtils.isNotBlank(user.getId())){
+			this.updateBy = user;
+		}
 		this.updateDate = new Date();
 	}
 

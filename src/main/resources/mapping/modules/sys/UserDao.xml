@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.modules.sys.dao.UserDao" >
-  <resultMap id="BaseResultMap" type="com.modules.sys.entity.User" >
-      <id column="id" property="id" jdbcType="VARCHAR" />
-      <result column="login_name" property="loginName" jdbcType="VARCHAR" />
-      <result column="password" property="password" jdbcType="VARCHAR" />
-      <result column="name" property="name" jdbcType="VARCHAR" />
-      <result column="login_flag" property="loginFlag" jdbcType="CHAR" />
-      <result column="create_by" property="createBy.id" jdbcType="VARCHAR" />
-      <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
-      <result column="update_by" property="updateBy.id" jdbcType="VARCHAR" />
-      <result column="update_date" property="updateDate" jdbcType="TIMESTAMP" />
-      <result column="remarks" property="remarks" jdbcType="VARCHAR" />
-      <result column="del_flag" property="delFlag" jdbcType="CHAR" />
-  </resultMap>
+<mapper namespace="com.modules.sys.dao.UserDao">
+    <resultMap id="BaseResultMap" type="com.modules.sys.entity.User">
+        <id column="id" property="id" jdbcType="VARCHAR"/>
+        <result column="login_name" property="loginName" jdbcType="VARCHAR"/>
+        <result column="password" property="password" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="login_flag" property="loginFlag" jdbcType="CHAR"/>
+        <result column="create_by" property="createBy.id" jdbcType="VARCHAR"/>
+        <result column="create_date" property="createDate" jdbcType="TIMESTAMP"/>
+        <result column="update_by" property="updateBy.id" jdbcType="VARCHAR"/>
+        <result column="update_date" property="updateDate" jdbcType="TIMESTAMP"/>
+        <result column="remarks" property="remarks" jdbcType="VARCHAR"/>
+        <result column="del_flag" property="delFlag" jdbcType="CHAR"/>
+    </resultMap>
 
-  <sql id="userColumns">
+    <sql id="userColumns">
 		a.id AS 'id',
 		a.login_name AS 'loginName',
 		a.password AS 'password',
@@ -29,18 +29,50 @@
 		a.del_flag AS 'delFlag'
 	</sql>
 
-  <!-- 通过loginName获取用户 -->
-  <select id="getUserByLoginName" resultType="com.modules.sys.entity.User">
-    SELECT <include refid="userColumns" />
-    FROM sys_user a
-    <where>
-      login_name = #{loginName}
-    </where>
-  </select>
+    <!-- 增加 -->
+    <insert id="insert" parameterType="com.modules.sys.entity.User">
+        insert into sys_user(
+            id,
+            login_name,
+            password,
+            name,
+            login_flag,
+            create_by,
+            create_date,
+            update_by,
+            update_date,
+            remarks,
+            del_flag
+        ) values (
+            #{id},
+            #{loginName},
+            #{password},
+            #{name},
+            #{loginFlag},
+            #{createBy.id},
+            #{createDate},
+            #{updateBy.id},
+            #{updateDate},
+            #{remarks},
+            #{delFlag}
+        )
+    </insert>
 
-  <!-- 查询所有用户 -->
-  <select id="findAllUser" resultType="com.modules.sys.entity.User">
-    SELECT <include refid="userColumns" /> FROM sys_user a
-  </select>
+    <!-- 通过loginName获取用户 -->
+    <select id="getUserByLoginName" resultType="com.modules.sys.entity.User">
+        SELECT
+        <include refid="userColumns"/>
+        FROM sys_user a
+        <where>
+            login_name = #{loginName}
+        </where>
+    </select>
+
+    <!-- 查询所有用户 -->
+    <select id="findAllUser" resultType="com.modules.sys.entity.User">
+        SELECT
+        <include refid="userColumns"/>
+        FROM sys_user a
+    </select>
 
 </mapper>
