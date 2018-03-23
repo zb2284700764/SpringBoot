@@ -28,7 +28,7 @@ public class UserController extends BaseController {
      * @param user
      * @return
      */
-//    @RequiresPermissions("add")
+    @RequiresPermissions("add")
     @RequestMapping("/save")
     public String save(@ModelAttribute(value = "user") User user) {
 
@@ -46,6 +46,7 @@ public class UserController extends BaseController {
      *
      * @date 2017年9月19日 下午2:20:59
      */
+    @RequiresPermissions("add")
     @RequestMapping("/gotoUserForm")
     public ModelAndView gotoUserForm(ModelAndView modelAndView) {
         modelAndView.addObject("user", new User());

@@ -1,6 +1,7 @@
 package com.modules.sys.dao;
 
 import com.common.persistence.CrudDao;
+import com.common.persistence.annotation.MyBatisDao;
 import com.modules.sys.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

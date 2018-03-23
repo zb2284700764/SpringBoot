@@ -2,9 +2,12 @@ package com.modules.sys.shiro;
 
 import com.common.config.Global;
 import com.common.util.Encodes;
-import com.google.common.collect.Lists;
+import com.modules.sys.entity.Menu;
+import com.modules.sys.entity.Role;
 import com.modules.sys.entity.User;
-import com.modules.sys.service.SystemService;
+import com.modules.sys.service.MenuService;
+import com.modules.sys.service.RoleService;
+import com.modules.sys.service.UserService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -22,7 +25,11 @@ import java.util.List;
 public class SystemAuthorizingRealm extends AuthorizingRealm {
 
     @Autowired
-    private SystemService systemService;
+    private UserService userService;
+    @Autowired
+    private RoleService roleService;
+    @Autowired
+    private MenuService menuService;
 
 
     /**
@@ -35,35 +42,47 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
         // /获取用户名和密码的令牌
         UsernamePasswordToken usernamePasswordToken = (UsernamePasswordToken) authToken;
 
-
-        User user = systemService.getByLoginName(usernamePasswordToken.getUsername());
-        if (user != null) {
-            if (Global.NO.equals(user.getLoginFlag())) {
-                throw new AuthenticationException("msg:该已帐号禁止登录.");
-            }
-
-            byte[] salt = Encodes.decodeHex(user.getPassword().substring(0, 16));
-            return new SimpleAuthenticationInfo(user, // 用户名
-                                                user.getPassword().substring(16), // 密码
-                                                ByteSource.Util.bytes(salt), // salt = 加密之后的密码
-                                                getName() // realm name
-            );
+        User user = userService.getByLoginName(usernamePasswordToken.getUsername());
+        if (user == null) {
+            throw new AccountException("帐号或密码不正确！");
+        } else if (Global.NO.equals(user.getLoginFlag())) {
+            throw new DisabledAccountException("帐号已经禁止登录！");
         } else {
-            return null;
+            // FIXME 更新登录时间 last login time
+
         }
+
+        // 密码加密
+        byte[] salt = Encodes.decodeHex(user.getPassword().substring(0, 16));
+        // 登录认证
+        return new SimpleAuthenticationInfo(user, // 用户名
+                                            user.getPassword().substring(16), // 密码
+                                            ByteSource.Util.bytes(salt), // salt = 加密之后的密码
+                                            getName() // realm name
+        );
     }
 
 
     /**
-     * 授权查询回调函数,进行鉴权但缓存中无用户的授权信息时调用
+     * 授权查询回调函数
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-
-        Object principal = getAvailablePrincipal(principals);
-        System.out.println("登录之后访问权限控制的菜单或内容时进行授权--> doGetAuthorizationInfo " + principal);
+        // 获取当前已经登录的用户
+        User user = (User) getAvailablePrincipal(principals);
+        System.out.println("登录之后访问权限控制的菜单或内容时进行授权--> doGetAuthorizationInfo " + user.getLoginName());
 
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+
+        // 根据 userId 查询对应的角色和权限
+        List<Role> roles = roleService.findRoleByUserId(user.getId());
+
+        List<Menu> menus = menuService.findMenuByUserId(user.getId());
+
+
+        // 查询该登录用户对应的菜单
+
+
 //		// 添加基于Permission的权限信息
 //		info.addStringPermission("add");
 //		info.addStringPermission("edit");
@@ -73,18 +92,20 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 //		info.addRole("role");
 
 
-        List<String> roles = Lists.newArrayList();
-        List<String> permissions = Lists.newArrayList();
-        roles.add("admin");
-        roles.add("guest");
-        permissions.add("add");
-        permissions.add("edit");
-        info.addRoles(roles);
-        info.addStringPermissions(permissions);
+        // 角色集合
+//        List<String> roles = Lists.newArrayList();
+//        roles.add("admin");
+//        roles.add("guest");
+//        info.addRoles(roles);
+//
+//        // 权限集合
+//        List<String> permissions = Lists.newArrayList();
+//        permissions.add("add");
+//        permissions.add("edit");
+//        info.addStringPermissions(permissions);
+
         return info;
     }
-
-
 
 
     /**

@@ -69,3 +69,36 @@ create table sys_user_role(
 	role_id varchar(64) comment '角色id',
 	PRIMARY KEY (user_id, role_id)
 );
+
+
+
+DROP TABLE IF EXISTS `sys_menu`;
+create table sys_menu(
+	id varchar(64) comment '编号',
+	parent_id varchar(64) comment '父级编号',
+	parent_ids varchar(2000) comment '所有父级编号',
+	name varchar(100) comment '名称',
+	sort decimal(10,0) comment '排序',
+	href varchar(2000) comment '链接',
+	target varchar(20) comment '目标',
+	icon varchar(100) comment '图标',
+	is_show char(1) comment '是否在菜单中显示',
+	permission varchar(200) comment '权限标识',
+	create_by varchar(64) comment '创建者',
+	create_date datetime comment '创建时间',
+	update_by varchar(64) comment '更新者',
+	update_date datetime comment '更新时间',
+	remarks varchar(255) comment '备注信息',
+	del_flag char(1) comment '删除标记',
+	primary key (id)
+)
+
+
+
+create table sys_role_menu(
+        role_id varchar(64) comment '角色id',
+        menu_id varchar(64) comment '菜单id',
+        primary key (role_id, menu_id)
+);
+
+

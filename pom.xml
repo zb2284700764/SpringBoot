@@ -54,10 +54,12 @@
 		</dependency>
 		<!-- spring boot 测试包 -->
 
+		<!--
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-jdbc</artifactId>
 		</dependency>
+		-->
 
 		<!-- mybatis 配置 -->
 		<dependency>

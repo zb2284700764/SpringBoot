@@ -11,19 +11,18 @@ import java.util.List;
 @Service
 public class UserService extends CrudService<UserDao, User> {
 
-
     /**
-     * 通过登录名获取用户信息
-     * @Title getUserByLoginName
+     * 根据登录名获取用户信息
+     * @Title getByLoginName
      * @require
-     * @param loginName 登录名
+     * @param loginName
      * @return
      * @throws
      * @author zhoubin
-     * @date 2017年6月30日 下午4:12:33
+     * @date 2017年7月6日 下午4:55:50
      * @history
      */
-    public User getUserByLoginName(String loginName) {
+    public User getByLoginName(String loginName) {
 
         return dao.getUserByLoginName(loginName);
     }

@@ -1,14 +1,19 @@
 package com.modules.sys.shiro;
 
-
 import com.google.common.collect.Maps;
+import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.spring.LifecycleBeanPostProcessor;
+import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 
 import java.util.LinkedHashMap;
+import java.util.Properties;
 
 /**
  * Shiro 配置，替代 XML 配置方式
@@ -17,7 +22,7 @@ import java.util.LinkedHashMap;
 public class ShiroConfiguration {
 
     @Bean
-    public ShiroFilterFactoryBean shiroFilter(@Qualifier("securityManager") DefaultWebSecurityManager securityManager) {
+    public ShiroFilterFactoryBean shiroFilter(@Qualifier("securityManager") SecurityManager securityManager) {
         System.out.println("--------------shiroFilter 已加载----------------");
 
 
@@ -33,17 +38,15 @@ public class ShiroConfiguration {
         shiroFilterFactoryBean.setSuccessUrl("/a?login");
 
         // 没有权限默认跳转的页面
-        shiroFilterFactoryBean.setUnauthorizedUrl("/a/defaultIndex");
+//        shiroFilterFactoryBean.setUnauthorizedUrl("/a/defaultIndex");
 
         // 权限过滤的页面
         LinkedHashMap filterChainDefinitionMap = Maps.newLinkedHashMap();
-        filterChainDefinitionMap.put("/a/sys/user/index1", "anon"); // anon 表示可以匿名访问
-        filterChainDefinitionMap.put("/a/sys/user/index2", "anon"); // anon 表示可以匿名访问
-        filterChainDefinitionMap.put("/a/sys/user/index3", "authc"); // authc 表示需要认证才可以访问
 
         filterChainDefinitionMap.put("/static/**", "anon"); // anon 表示可以匿名访问
-        filterChainDefinitionMap.put("/a/login", "authc"); // authc 表示需要认证才可以访问
-        filterChainDefinitionMap.put("/logout", "logout");
+//        filterChainDefinitionMap.put("/a/**", "user"); // user 用户拦截器 用户已经身份验证/记住我登录的都可
+//        filterChainDefinitionMap.put("/a/loginOut", "logout");
+        filterChainDefinitionMap.put("/a/**", "authc"); // authc 表示需要认证才可以访问
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 
         return shiroFilterFactoryBean;
@@ -51,12 +54,57 @@ public class ShiroConfiguration {
 
 
     @Bean(name = "securityManager")
-    public DefaultWebSecurityManager securityManager(@Qualifier("systemAuthorizingRealm") SystemAuthorizingRealm systemAuthorizingRealm) {
+    public SecurityManager securityManager(@Qualifier("systemAuthorizingRealm") SystemAuthorizingRealm systemAuthorizingRealm) {
         System.out.println("--------------shiro securityManager 已经加载----------------");
-        DefaultWebSecurityManager manager = new DefaultWebSecurityManager();
-        manager.setRealm(systemAuthorizingRealm);
-        return manager;
+        DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
+        securityManager.setRealm(systemAuthorizingRealm);
+        return securityManager;
     }
 
 
+    @Bean(name = "lifecycleBeanPostProcessor")
+    public LifecycleBeanPostProcessor getLifecycleBeanPostProcessor() {
+        return new LifecycleBeanPostProcessor();
+    }
+
+
+    /**
+     * 开启shiro aop注解支持. 使用代理方式;所以需要开启代码支持; Controller才能使用@RequiresPermissions
+     *
+     * @param securityManager
+     * @return
+     */
+    @Bean
+    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(
+            @Qualifier("securityManager") SecurityManager securityManager) {
+        AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
+        authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
+        return authorizationAttributeSourceAdvisor;
+    }
+
+    /**
+     * DefaultAdvisorAutoProxyCreator，Spring的一个bean，由Advisor决定对哪些类的方法进行AOP代理。
+     */
+    @Bean
+    public DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator() {
+        DefaultAdvisorAutoProxyCreator defaultAAP = new DefaultAdvisorAutoProxyCreator();
+        defaultAAP.setProxyTargetClass(true);
+        return defaultAAP;
+    }
+
+
+    /**
+     * 异常拦截并跳转到对应的界面
+     * @return
+     */
+    @Bean
+    public SimpleMappingExceptionResolver simpleMappingExceptionResolver(){
+        SimpleMappingExceptionResolver simpleMappingExceptionResolver = new SimpleMappingExceptionResolver();
+        Properties properties = new Properties();
+
+        // key 为异常类，value 为直接对应的页面
+        properties.setProperty("org.apache.shiro.authz.UnauthorizedException", "/sys/defaultIndex");
+        simpleMappingExceptionResolver.setExceptionMappings(properties);
+        return simpleMappingExceptionResolver;
+    }
 }

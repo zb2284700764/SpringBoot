@@ -4,10 +4,13 @@ import com.common.security.Digests;
 import com.common.service.BaseService;
 import com.common.util.Encodes;
 import com.modules.sys.dao.UserDao;
+import com.modules.sys.entity.Menu;
 import com.modules.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  *
@@ -25,25 +28,6 @@ public class SystemService extends BaseService {
 //	public static final int HASH_INTERATIONS = 1024; // 散列次数
 	public static final int SALT_SIZE = 8; // 盐的长度
 	
-
-	@Autowired
-	private UserDao userDao;
-	
-	/**
-	 * 根据登录名获取用户信息
-	 * @Title getByLoginName
-	 * @require 
-	 * @param loginName
-	 * @return 
-	 * @throws 
-	 * @author zhoubin
-	 * @date 2017年7月6日 下午4:55:50
-	 * @history
-	 */
-	public User getByLoginName(String loginName) {
-		
-		return userDao.getUserByLoginName(loginName);
-	}
 
 
 
