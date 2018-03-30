@@ -1,4 +1,4 @@
-package com.modules.sys.shiro;
+package com.common.core.shiro;
 
 import com.google.common.collect.Maps;
 import org.apache.shiro.mgt.SecurityManager;
@@ -57,7 +57,17 @@ public class ShiroConfiguration {
     public SecurityManager securityManager(@Qualifier("systemAuthorizingRealm") SystemAuthorizingRealm systemAuthorizingRealm) {
         System.out.println("--------------shiro securityManager 已经加载----------------");
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
+        // 设置 realm 为自定义实现 AuthorizingRealm 的 realm
         securityManager.setRealm(systemAuthorizingRealm);
+
+        // 设置 shiro 缓存管理器
+        securityManager.setCacheManager(null);
+
+        // 设置 shiro 会话管理器
+        securityManager.setSessionManager(null);
+
+
+
         return securityManager;
     }
 

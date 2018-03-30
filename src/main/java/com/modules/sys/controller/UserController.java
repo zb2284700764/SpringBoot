@@ -28,16 +28,13 @@ public class UserController extends BaseController {
      * @param user
      * @return
      */
-    @RequiresPermissions("add")
+    @RequiresPermissions("sys:user:add")
     @RequestMapping("/save")
     public String save(@ModelAttribute(value = "user") User user) {
 
-        System.out.println("save user");
-
         userService.save(user);
 
-        System.out.println("增加成功");
-
+        LOGGER.info("UserController -> save -> 增加成功");
         return "redirect:" + adminPath + "/sys/user/findAllUser";
     }
 
@@ -46,12 +43,15 @@ public class UserController extends BaseController {
      *
      * @date 2017年9月19日 下午2:20:59
      */
-    @RequiresPermissions("add")
+    @RequiresPermissions("sys:user:add")
     @RequestMapping("/gotoUserForm")
     public ModelAndView gotoUserForm(ModelAndView modelAndView) {
+
+        // 对应 userForm.html 页面中 saveForm 下的表单对象
         modelAndView.addObject("user", new User());
 
         modelAndView.setViewName("sys/userForm");
+        LOGGER.info("UserController -> gotoUserForm -> 增加成功");
         return modelAndView;
     }
 
@@ -61,6 +61,7 @@ public class UserController extends BaseController {
      * @param modelAndView
      * @date 2017年9月18日 下午5:20:40
      */
+    @RequiresPermissions("sys:user:view")
     @RequestMapping("/findAllUser")
     public ModelAndView findAllUser(ModelAndView modelAndView) {
         List<User> userList = userService.findAllUser();

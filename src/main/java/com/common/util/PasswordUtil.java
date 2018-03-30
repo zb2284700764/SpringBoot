@@ -8,11 +8,10 @@ import com.common.security.Digests;
 public class PasswordUtil {
 
 
-	public static final String HASH_ALGORITHM = "MD5";
-	public static final int HASH_INTERATIONS = 2; // 散列次数
-//	public static final String HASH_ALGORITHM = "SHA-1";
-//	public static final int HASH_INTERATIONS = 1024; // 散列次数
-	public static final int SALT_SIZE = 8; // 盐的长度
+	public static final String HASH_ALGORITHM_MD5 = "MD5";
+	public static final String HASH_ALGORITHM_SHA1 = "SHA-1";
+	public static final int HASH_INTERATIONS = 1024; // 散列次数
+	private static final int SALT_SIZE = 8; // 盐的长度
 
 	
 

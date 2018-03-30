@@ -1,7 +1,9 @@
-package com.modules.sys.shiro;
+package com.common.core.shiro;
 
 import com.common.config.Global;
 import com.common.util.Encodes;
+import com.common.util.PasswordUtil;
+import com.google.common.collect.Lists;
 import com.modules.sys.entity.Menu;
 import com.modules.sys.entity.Role;
 import com.modules.sys.entity.User;
@@ -74,35 +76,27 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 
-        // 根据 userId 查询对应的角色和权限
+        // 根据 userId 查询对应的角色
         List<Role> roles = roleService.findRoleByUserId(user.getId());
-
-        List<Menu> menus = menuService.findMenuByUserId(user.getId());
-
-
-        // 查询该登录用户对应的菜单
-
-
-//		// 添加基于Permission的权限信息
-//		info.addStringPermission("add");
-//		info.addStringPermission("edit");
-//		info.addStringPermission("delete");
-//		// 添加用户角色信息
-//		info.addRole("admin");
-//		info.addRole("role");
-
-
         // 角色集合
-//        List<String> roles = Lists.newArrayList();
-//        roles.add("admin");
-//        roles.add("guest");
-//        info.addRoles(roles);
-//
-//        // 权限集合
-//        List<String> permissions = Lists.newArrayList();
-//        permissions.add("add");
-//        permissions.add("edit");
-//        info.addStringPermissions(permissions);
+        List<String> rolesENname = Lists.newArrayList();
+        for (Role role : roles) {
+            if(null != role){
+                rolesENname.add(role.getEnname());
+            }
+        }
+        info.addRoles(rolesENname);
+
+        // 根据 userId 查询对应的菜单权限
+        List<Menu> menus = menuService.findMenuByUserId(user.getId());
+        // 菜单权限集合
+        List<String> permissions = Lists.newArrayList();
+        for(Menu menu : menus){
+            if (null != menu) {
+                permissions.add(menu.getPermission());
+            }
+        }
+        info.addStringPermissions(permissions);
 
         return info;
     }
@@ -116,8 +110,8 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
     public void initCredentialsMatcher() {
 //		HashedCredentialsMatcher matcher = new HashedCredentialsMatcher(SystemService.HASH_ALGORITHM);
 //		matcher.setHashIterations(SystemService.HASH_INTERATIONS);
-        HashedCredentialsMatcher matcher = new HashedCredentialsMatcher("SHA-1");
-        matcher.setHashIterations(1024);
+        HashedCredentialsMatcher matcher = new HashedCredentialsMatcher(PasswordUtil.HASH_ALGORITHM_SHA1);
+        matcher.setHashIterations(PasswordUtil.HASH_INTERATIONS);
         setCredentialsMatcher(matcher);
     }
 
