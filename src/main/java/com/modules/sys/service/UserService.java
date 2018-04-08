@@ -4,12 +4,16 @@ import com.common.service.CrudService;
 import com.modules.sys.dao.UserDao;
 import com.modules.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class UserService extends CrudService<UserDao, User> {
+
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
 
     /**
      * 根据登录名获取用户信息
@@ -38,7 +42,16 @@ public class UserService extends CrudService<UserDao, User> {
      * @history
      */
     public List<User> findAllUser(){
-        return dao.findAllUser();
+
+        List<User> userList = dao.findAllUser();
+
+        for (User user : userList) {
+            stringRedisTemplate.opsForValue().set(user.getId(),user.getLoginName());
+        }
+
+
+
+        return userList;
     }
 
 }

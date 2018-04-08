@@ -61,10 +61,10 @@ public class ShiroConfiguration {
         securityManager.setRealm(systemAuthorizingRealm);
 
         // 设置 shiro 缓存管理器
-        securityManager.setCacheManager(null);
+//        securityManager.setCacheManager(null);
 
         // 设置 shiro 会话管理器
-        securityManager.setSessionManager(null);
+//        securityManager.setSessionManager(null);
 
 
 
