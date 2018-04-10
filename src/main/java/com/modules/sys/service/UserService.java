@@ -4,6 +4,8 @@ import com.common.service.CrudService;
 import com.modules.sys.dao.UserDao;
 import com.modules.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -18,11 +20,12 @@ public class UserService extends CrudService<UserDao, User> {
 
     /**
      * 根据登录名获取用户信息
-     * @Title getByLoginName
-     * @require
+     *
      * @param loginName
      * @return
      * @throws
+     * @Title getByLoginName
+     * @require
      * @author zhoubin
      * @date 2017年7月6日 下午4:55:50
      * @history
@@ -34,23 +37,25 @@ public class UserService extends CrudService<UserDao, User> {
 
     /**
      * 查询所有用户
-     * @Title findAllUser
-     * @require
+     *
      * @return
      * @throws
+     * @Title findAllUser
+     * @require
      * @author zhoubin
      * @date 2017年9月18日 下午5:26:30
      * @history
      */
-    public List<User> findAllUser(){
+    public List<User> findAllUser() {
 
+        System.out.println("没从缓存查");
         List<User> userList = dao.findAllUser();
-
-        for (User user : userList) {
-            redisTemplate.opsForValue().set(user.getId(),user.getLoginName());
-        }
-
-
+//        for (User user : userList) {
+//            redisTemplate.opsForList().leftPush("userList", user);
+//        }
+//
+//        // 获取 3、4、5 条数据
+//        List<User> list = (List<User>) redisTemplate.opsForList().range("userList", 2, 4);
 
         return userList;
     }

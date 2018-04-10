@@ -93,7 +93,7 @@ public class ShiroConfiguration {
     }
 
     /**
-     * DefaultAdvisorAutoProxyCreator，Spring的一个bean，由Advisor决定对哪些类的方法进行AOP代理。
+     * DefaultAdvisorAutoProxyCreator，Spring的一个bean，由 Advisor 决定对哪些类的方法进行AOP代理。
      */
     @Bean
     public DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator() {
