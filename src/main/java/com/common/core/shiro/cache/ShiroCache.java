@@ -1,4 +1,4 @@
-package com.common.core.shiro;
+package com.common.core.shiro.cache;
 
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
