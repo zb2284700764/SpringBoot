@@ -70,6 +70,7 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+
         // 获取当前已经登录的用户
         User user = (User) getAvailablePrincipal(principals);
         System.out.println("登录之后访问权限控制的菜单或内容时进行授权--> doGetAuthorizationInfo " + user.getLoginName());

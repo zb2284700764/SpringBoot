@@ -3,15 +3,17 @@
  */
 package com.common.config;
 
+import org.springframework.beans.factory.annotation.Value;
+
 /**
  * 全局配置类
  */
 public class Global {
-
 	/**
 	 * 当前对象实例
 	 */
 	private static Global global = new Global();
+
 
 	/**
 	 * 显示/隐藏

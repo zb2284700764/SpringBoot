@@ -1,12 +1,17 @@
 package com.common.core.shiro;
 
+import com.common.core.shiro.cache.RedisCacheManager;
+import com.common.core.shiro.session.RedisSessionDao;
 import com.google.common.collect.Maps;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,10 +26,85 @@ import java.util.Properties;
 @Configuration
 public class ShiroConfiguration {
 
+    @Bean(name = "lifecycleBeanPostProcessor")
+    public LifecycleBeanPostProcessor getLifecycleBeanPostProcessor() {
+        return new LifecycleBeanPostProcessor();
+    }
+
+
+    @Bean(name = "redisSessionDao")
+    public RedisSessionDao redisSessionDao() {
+        return new RedisSessionDao();
+    }
+
+    @Bean(name = "redisCacheManager")
+    public RedisCacheManager redisCacheManager() {
+        return new RedisCacheManager();
+    }
+
+
+    @Bean(name = "sessionManager")
+    public SessionManager sessionManager() {
+        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+        sessionManager.setSessionDAO(redisSessionDao());
+        // session 失效时间(毫秒)
+        sessionManager.setGlobalSessionTimeout(1800 * 1000);
+        sessionManager.setCacheManager(redisCacheManager());
+
+        sessionManager.setSessionIdUrlRewritingEnabled(false);
+        // 定时检查 session 失效
+        sessionManager.setSessionValidationSchedulerEnabled(true);
+        return sessionManager;
+    }
+
+
+    @Bean(name = "securityManager")
+    public DefaultWebSecurityManager securityManager(@Qualifier("systemAuthorizingRealm") SystemAuthorizingRealm systemAuthorizingRealm) {
+        System.out.println("--------------shiro securityManager 已经加载----------------");
+        DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
+        // 设置 realm 为自定义实现 AuthorizingRealm 的 realm
+        securityManager.setRealm(systemAuthorizingRealm);
+
+        // 设置 shiro 缓存管理器
+        securityManager.setCacheManager(redisCacheManager());
+
+        // 设置 shiro 会话管理器
+        securityManager.setSessionManager(sessionManager());
+
+        return securityManager;
+    }
+
+
+    /**
+     * 开启shiro aop注解支持. 使用代理方式;所以需要开启代码支持; Controller才能使用@RequiresPermissions
+     * AOP式方法级权限检查
+     *
+     * @param securityManager
+     * @return
+     */
+    @Bean
+    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(
+            @Qualifier("securityManager") SecurityManager securityManager) {
+        AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
+        authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
+        return authorizationAttributeSourceAdvisor;
+    }
+
+    /**
+     * DefaultAdvisorAutoProxyCreator，Spring的一个bean，由 Advisor 决定对哪些类的方法进行AOP代理
+     * AOP式方法级权限检查
+     */
+    @Bean
+    public DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator() {
+        DefaultAdvisorAutoProxyCreator defaultAAP = new DefaultAdvisorAutoProxyCreator();
+        defaultAAP.setProxyTargetClass(true);
+        return defaultAAP;
+    }
+
+
     @Bean
     public ShiroFilterFactoryBean shiroFilter(@Qualifier("securityManager") SecurityManager securityManager) {
         System.out.println("--------------shiroFilter 已加载----------------");
-
 
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
 
@@ -53,62 +133,13 @@ public class ShiroConfiguration {
     }
 
 
-    @Bean(name = "securityManager")
-    public SecurityManager securityManager(@Qualifier("systemAuthorizingRealm") SystemAuthorizingRealm systemAuthorizingRealm) {
-        System.out.println("--------------shiro securityManager 已经加载----------------");
-        DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
-        // 设置 realm 为自定义实现 AuthorizingRealm 的 realm
-        securityManager.setRealm(systemAuthorizingRealm);
-
-        // 设置 shiro 缓存管理器
-//        securityManager.setCacheManager(null);
-
-        // 设置 shiro 会话管理器
-//        securityManager.setSessionManager(null);
-
-
-
-        return securityManager;
-    }
-
-
-    @Bean(name = "lifecycleBeanPostProcessor")
-    public LifecycleBeanPostProcessor getLifecycleBeanPostProcessor() {
-        return new LifecycleBeanPostProcessor();
-    }
-
-
-    /**
-     * 开启shiro aop注解支持. 使用代理方式;所以需要开启代码支持; Controller才能使用@RequiresPermissions
-     *
-     * @param securityManager
-     * @return
-     */
-    @Bean
-    public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(
-            @Qualifier("securityManager") SecurityManager securityManager) {
-        AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();
-        authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
-        return authorizationAttributeSourceAdvisor;
-    }
-
-    /**
-     * DefaultAdvisorAutoProxyCreator，Spring的一个bean，由 Advisor 决定对哪些类的方法进行AOP代理。
-     */
-    @Bean
-    public DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator() {
-        DefaultAdvisorAutoProxyCreator defaultAAP = new DefaultAdvisorAutoProxyCreator();
-        defaultAAP.setProxyTargetClass(true);
-        return defaultAAP;
-    }
-
-
     /**
      * 异常拦截并跳转到对应的界面
+     *
      * @return
      */
     @Bean
-    public SimpleMappingExceptionResolver simpleMappingExceptionResolver(){
+    public SimpleMappingExceptionResolver simpleMappingExceptionResolver() {
         SimpleMappingExceptionResolver simpleMappingExceptionResolver = new SimpleMappingExceptionResolver();
         Properties properties = new Properties();
 

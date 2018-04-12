@@ -35,7 +35,7 @@
 		<zxing.version>3.3.2</zxing.version>
 		<guava.version>24.0-jre</guava.version>
 		<jackson.mapper.asl.version>1.9.13</jackson.mapper.asl.version>
-		<jackson.version>2.9.4</jackson.version>
+		<jackson.version>2.9.1</jackson.version>
 		<jedis.version>2.9.0</jedis.version>
 	</properties>
 
@@ -195,6 +195,9 @@
 			<optional>true</optional>
 			<scope>true</scope>
 		</dependency>
+		<!-- 热部署工具 devtools -->
+
+
 		<dependency>
 			<groupId>org.assertj</groupId>
 			<artifactId>assertj-core</artifactId>
