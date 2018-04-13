@@ -4,10 +4,7 @@ import com.common.service.CrudService;
 import com.modules.sys.dao.UserDao;
 import com.modules.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheConfig;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -48,20 +45,14 @@ public class UserService extends CrudService<UserDao, User> {
      */
     public List<User> findAllUser() {
 
-        System.out.println("没从缓存查");
-        List<User> userList = dao.findAllUser();
 
-
-        for (User user : userList) {
-            redisTemplate.opsForList().leftPush("userList", user);
+        List<User> userList = (List<User>) redisTemplate.opsForList().range("userList", 0, -1);
+        if (userList == null && userList.size() == 0) {
+            System.out.println("缓存没有，查询数据库");
+            userList = dao.findAllUser();
         }
 
-        // 获取 3、4、5 条数据
-        List<User> list = (List<User>) redisTemplate.opsForList().range("userList", 2, 4);
 
-
-        redisTemplate.opsForValue().set("list", userList);
-        List<User> l = (List<User>) redisTemplate.opsForValue().get("list");
 
         return userList;
     }
