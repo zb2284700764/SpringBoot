@@ -47,7 +47,7 @@ public class UserService extends CrudService<UserDao, User> {
 
 
         List<User> userList = (List<User>) redisTemplate.opsForList().range("userList", 0, -1);
-        if (userList == null && userList.size() == 0) {
+        if (userList == null || userList.size() == 0) {
             System.out.println("缓存没有，查询数据库");
             userList = dao.findAllUser();
         }

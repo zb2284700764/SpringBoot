@@ -60,7 +60,7 @@ public class LoginController extends BaseController {
 	 */
 	@RequestMapping("${adminPath}")
 	public String login() {
-		System.out.println("a");
+		System.out.println("输入项目名称之后默认跳转到此方法");
 		
 		return "redirect:" + adminPath + "/login";
 	}
