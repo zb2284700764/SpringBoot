@@ -109,20 +109,11 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
      */
     @PostConstruct
     public void initCredentialsMatcher() {
-//		HashedCredentialsMatcher matcher = new HashedCredentialsMatcher(SystemService.HASH_ALGORITHM);
-//		matcher.setHashIterations(SystemService.HASH_INTERATIONS);
         HashedCredentialsMatcher matcher = new HashedCredentialsMatcher(PasswordUtil.HASH_ALGORITHM_SHA1);
         matcher.setHashIterations(PasswordUtil.HASH_INTERATIONS);
         setCredentialsMatcher(matcher);
     }
 
-
-//	public SystemService getSystemService() {
-//		if(systemService == null) {
-//			systemService = SpringContextHolder.getBean(SystemService.class);
-//		}
-//		return systemService;
-//	}
 
 
 }
