@@ -190,12 +190,14 @@
 		<!-- ImageUtil 用到的类 -->
 
 		<!-- 热部署工具 devtools -->
+<!--
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 			<optional>true</optional>
 			<scope>true</scope>
 		</dependency>
+-->
 		<!-- 热部署工具 devtools -->
 
 
