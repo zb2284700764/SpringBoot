@@ -4,6 +4,8 @@ import com.common.service.CrudService;
 import com.modules.sys.dao.UserDao;
 import com.modules.sys.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -44,7 +46,6 @@ public class UserService extends CrudService<UserDao, User> {
      * @history
      */
     public List<User> findAllUser() {
-
 
         List<User> userList = (List<User>) redisTemplate.opsForList().range("userList", 0, -1);
         if (userList == null || userList.size() <= 0) {

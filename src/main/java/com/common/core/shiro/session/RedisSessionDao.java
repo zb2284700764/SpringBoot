@@ -1,19 +1,13 @@
 package com.common.core.shiro.session;
 
-import com.common.util.ObjectUtils;
-import com.common.util.StringUtils;
 import org.apache.shiro.session.Session;
-import org.apache.shiro.session.mgt.SimpleSession;
 import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
@@ -27,8 +21,8 @@ public class RedisSessionDao extends EnterpriseCacheSessionDAO {
 
     // session key 前缀
     private String sessionPrefix = "shiro-session:";
-    // session 在 redis 过期时间是30分钟
-    private int sessionExpireTime = 1800;
+    // session 在 redis 过期时间是30分钟(1800秒)
+    private int sessionExpireTime = 30;
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
@@ -41,6 +35,8 @@ public class RedisSessionDao extends EnterpriseCacheSessionDAO {
      */
     @Override
     protected Serializable doCreate(Session session) {
+        System.out.println("---------------------- RedisSessionDao doCreate() ----------------------");
+
         Serializable sessionId = super.doCreate(session);
         logger.debug("创建session:{}", session.getId());
 //        redisTemplate.opsForValue().set(sessionPrefix + sessionId, ObjectUtils.serialize(session));
@@ -56,6 +52,8 @@ public class RedisSessionDao extends EnterpriseCacheSessionDAO {
      */
     @Override
     protected Session doReadSession(Serializable sessionId) {
+        System.out.println("---------------------- RedisSessionDao doReadSession() ----------------------");
+
         logger.debug("获取session:{}", sessionId);
         // 先从缓存中获取session，如果没有再去数据库中获取
         Session session = super.doReadSession(sessionId);
@@ -77,6 +75,8 @@ public class RedisSessionDao extends EnterpriseCacheSessionDAO {
      */
     @Override
     protected void doUpdate(Session session) {
+        System.out.println("---------------------- RedisSessionDao doUpdate() ----------------------");
+
 
         super.doUpdate(session);
         logger.debug("获取session:{}", session.getId());
@@ -96,6 +96,8 @@ public class RedisSessionDao extends EnterpriseCacheSessionDAO {
      */
     @Override
     protected void doDelete(Session session) {
+        System.out.println("---------------------- RedisSessionDao doDelete() ----------------------");
+
         logger.debug("删除session:{}", session.getId());
         super.doDelete(session);
         redisTemplate.delete(sessionPrefix + session.getId().toString());

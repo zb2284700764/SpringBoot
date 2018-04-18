@@ -3,15 +3,17 @@ package com.common.core.shiro;
 import com.common.core.shiro.cache.RedisCacheManager;
 import com.common.core.shiro.session.RedisSessionDao;
 import com.google.common.collect.Maps;
+import org.apache.shiro.codec.Base64;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
+import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -57,6 +59,24 @@ public class ShiroConfiguration {
         return sessionManager;
     }
 
+    @Bean
+    public SimpleCookie rememberMeCookie() {
+        // 这个参数是cookie的名称，对应前端的checkbox的name = rememberMe
+        SimpleCookie cookie = new SimpleCookie("rememberMe");
+        // cookie 生效时间 30 天，单位(秒)
+        cookie.setMaxAge(30 * 24 * 60 * 60);
+        return cookie;
+    }
+
+    @Bean
+    public CookieRememberMeManager rememberMeManager() {
+        CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
+        cookieRememberMeManager.setCookie(rememberMeCookie());
+        // 设置 rememberMe cookie 加密的密匙，默认AES算法 密钥长度(128 256 512 位)
+        cookieRememberMeManager.setCipherKey(Base64.decode("DoHkenUvfszBE0/Z017AHw=="));
+        return cookieRememberMeManager;
+    }
+
 
     @Bean(name = "securityManager")
     public DefaultWebSecurityManager securityManager(@Qualifier("systemAuthorizingRealm") SystemAuthorizingRealm systemAuthorizingRealm) {
@@ -70,6 +90,9 @@ public class ShiroConfiguration {
 
         // 设置 shiro 会话管理器
         securityManager.setSessionManager(sessionManager());
+
+        // 设置记住我管理器
+        securityManager.setRememberMeManager(rememberMeManager());
 
         return securityManager;
     }
