@@ -26,7 +26,7 @@ import java.util.Set;
  * Redis 缓存配置类，通过 Lettuce Client 实现
  */
 @Configuration
-public class LettuceRedisConfig extends CachingConfigurerSupport {
+public class RedisConfig extends CachingConfigurerSupport {
 
     @Autowired
     private LettuceConnectionFactory lettuceConnectionFactory;

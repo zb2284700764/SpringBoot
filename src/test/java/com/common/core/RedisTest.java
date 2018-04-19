@@ -10,16 +10,19 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import java.security.NoSuchAlgorithmException;
 
-@RunWith(SpringRunner.class)
+//@RunWith(SpringRunner.class)
 //@SpringBootTest
 public class RedisTest {
 
 
     @Test
     public void testAES() throws NoSuchAlgorithmException {
-        KeyGenerator keygen = KeyGenerator.getInstance("AES");
-        SecretKey deskey = keygen.generateKey();
-        System.out.println(Base64.encodeToString(deskey.getEncoded()));
+//        KeyGenerator keygen = KeyGenerator.getInstance("AES");
+//        SecretKey deskey = keygen.generateKey();
+//        System.out.println(Base64.encodeToString(deskey.getEncoded()));
+
+        System.out.println(System.getProperty("user.home"));
+
     }
 
 }

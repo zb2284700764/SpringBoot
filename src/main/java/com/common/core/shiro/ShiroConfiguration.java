@@ -39,6 +39,7 @@ public class ShiroConfiguration {
         return new RedisSessionDao();
     }
 
+
     @Bean(name = "redisCacheManager")
     public RedisCacheManager redisCacheManager() {
         return new RedisCacheManager();
@@ -50,7 +51,7 @@ public class ShiroConfiguration {
         DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
         sessionManager.setSessionDAO(redisSessionDao());
         // session 失效时间(毫秒)
-        sessionManager.setGlobalSessionTimeout(1800 * 1000);
+        sessionManager.setGlobalSessionTimeout(30 * 60 * 1000);
         sessionManager.setCacheManager(redisCacheManager());
 
         sessionManager.setSessionIdUrlRewritingEnabled(false);

@@ -50,7 +50,7 @@ public class UserController extends BaseController {
         // 对应 userForm.html 页面中 saveForm 下的表单对象
         modelAndView.addObject("user", new User());
 
-        modelAndView.setViewName("sys/userForm");
+        modelAndView.setViewName("modules/sys/userForm");
         LOGGER.info("UserController -> gotoUserForm -> 增加成功");
         return modelAndView;
     }
@@ -66,7 +66,7 @@ public class UserController extends BaseController {
     public ModelAndView findAllUser(ModelAndView modelAndView) {
         List<User> userList = userService.findAllUser();
         modelAndView.addObject("userList", userList);
-        modelAndView.setViewName("sys/userList");
+        modelAndView.setViewName("modules/sys/userList");
         return modelAndView;
     }
 }

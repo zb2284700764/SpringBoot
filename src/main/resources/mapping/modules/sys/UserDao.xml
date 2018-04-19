@@ -21,6 +21,7 @@
 		a.password AS 'password',
 		a.name AS 'name',
 		a.login_flag AS 'loginFlag',
+		a.last_login_time AS 'lastLoginTime',
 		a.create_by AS 'createBy.id',
 		a.create_date AS 'createDate',
 		a.update_by AS 'updateBy.id',
@@ -28,6 +29,16 @@
 		a.remarks AS 'remarks',
 		a.del_flag AS 'delFlag'
 	</sql>
+
+    <!-- 通过loginName 获取用户 -->
+    <select id="getUserByLoginName" resultType="User">
+        SELECT
+        <include refid="userColumns"/>
+        FROM sys_user a
+        <where>
+            login_name =#{loginName}
+        </where>
+    </select>
 
     <!-- 增加 -->
     <insert id="insert" parameterType="User">
@@ -37,6 +48,7 @@
             password,
             name,
             login_flag,
+            last_login_time,
             create_by,
             create_date,
             update_by,
@@ -49,6 +61,7 @@
             #{password},
             #{name},
             #{loginFlag},
+            #{lastLoginTime},
             #{createBy.id},
             #{createDate},
             #{updateBy.id},
@@ -58,15 +71,28 @@
         )
     </insert>
 
-    <!-- 通过loginName获取用户 -->
-    <select id="getUserByLoginName" resultType="User">
-        SELECT
-        <include refid="userColumns"/>
-        FROM sys_user a
+    <update id="update">
+        update sys_user set u
+        pdate_by = #{updateBy.id},
+        update_date = #{updateDate}
+        <if test="password != null and password != ''">
+            ,password = #{password}
+        </if>
+        <if test="name != null and name != ''">
+            ,name = #{name}
+        </if>
+        <if test="loginFlag != null and loginFlag != ''">
+            ,login_flag = #{loginFlag}
+        </if>
+        <if test="lastLoginTime != null and lastLoginTime != ''">
+            ,last_login_time = #{lastLoginTime}
+        </if>
         <where>
-            login_name = #{loginName}
+            id = #{id}
         </where>
-    </select>
+
+    </update>
+
 
     <!-- 查询所有用户 -->
     <select id="findAllUser" resultType="User">

@@ -5,6 +5,7 @@ import org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -20,9 +21,13 @@ public class RedisSessionDao extends EnterpriseCacheSessionDAO {
     private static Logger logger = LoggerFactory.getLogger(RedisSessionDao.class);
 
     // session key 前缀
-    private String sessionPrefix = "shiro-session:";
+    @Value("${redis.shiro.session.prefix}")
+    public String sessionPrefix;
+//    private String sessionPrefix = "shiro-session:";
     // session 在 redis 过期时间是30分钟(1800秒)
-    private int sessionExpireTime = 30;
+    @Value("${redis.shiro.session.expireTime}")
+    public int sessionExpireTime;
+//    private int sessionExpireTime = 30;
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
@@ -35,11 +40,8 @@ public class RedisSessionDao extends EnterpriseCacheSessionDAO {
      */
     @Override
     protected Serializable doCreate(Session session) {
-        System.out.println("---------------------- RedisSessionDao doCreate() ----------------------");
-
         Serializable sessionId = super.doCreate(session);
-        logger.debug("创建session:{}", session.getId());
-//        redisTemplate.opsForValue().set(sessionPrefix + sessionId, ObjectUtils.serialize(session));
+//        logger.debug("创建session:{}", session.getId());
         redisTemplate.opsForValue().set(sessionPrefix + sessionId, session);
         return sessionId;
     }
@@ -52,18 +54,11 @@ public class RedisSessionDao extends EnterpriseCacheSessionDAO {
      */
     @Override
     protected Session doReadSession(Serializable sessionId) {
-        System.out.println("---------------------- RedisSessionDao doReadSession() ----------------------");
-
-        logger.debug("获取session:{}", sessionId);
+//        logger.debug("获取session:{}", sessionId);
         // 先从缓存中获取session，如果没有再去数据库中获取
         Session session = super.doReadSession(sessionId);
         if (null == session) {
-
-            // FIXME 从 redis 中再次获取 session 会报错
-
-            System.out.println(redisTemplate.opsForValue().get(sessionPrefix + sessionId));
             session = (Session) redisTemplate.opsForValue().get(sessionPrefix + sessionId);
-
         }
         return session;
     }
@@ -75,11 +70,8 @@ public class RedisSessionDao extends EnterpriseCacheSessionDAO {
      */
     @Override
     protected void doUpdate(Session session) {
-        System.out.println("---------------------- RedisSessionDao doUpdate() ----------------------");
-
-
         super.doUpdate(session);
-        logger.debug("获取session:{}", session.getId());
+//        logger.debug("获取session:{}", session.getId());
         String key = sessionPrefix + session.getId();
         if (!redisTemplate.hasKey(key)) {
             redisTemplate.opsForValue().set(key, session);
@@ -96,8 +88,6 @@ public class RedisSessionDao extends EnterpriseCacheSessionDAO {
      */
     @Override
     protected void doDelete(Session session) {
-        System.out.println("---------------------- RedisSessionDao doDelete() ----------------------");
-
         logger.debug("删除session:{}", session.getId());
         super.doDelete(session);
         redisTemplate.delete(sessionPrefix + session.getId().toString());

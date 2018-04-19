@@ -30,13 +30,13 @@ public interface UserDao extends CrudDao<User> {
 	 * @history
 	 */
 	User getUserByLoginName(@Param("loginName") String loginName);
-	
+
 	/**
 	 * 查询所有用户
 	 * @Title findAllUser
-	 * @require 
-	 * @return 
-	 * @throws 
+	 * @require
+	 * @return
+	 * @throws
 	 * @author zhoubin
 	 * @date 2017年9月18日 下午5:24:03
 	 * @history

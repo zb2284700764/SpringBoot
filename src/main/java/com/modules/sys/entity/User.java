@@ -13,6 +13,7 @@ public class User extends DataEntity<User> {
     private String password;
     private String name;
     private String loginFlag;
+    private Date lastLoginTime;
 
     public String getLoginName() {
         return loginName;
@@ -44,5 +45,13 @@ public class User extends DataEntity<User> {
 
     public void setLoginFlag(String loginFlag) {
         this.loginFlag = loginFlag;
+    }
+
+    public Date getLastLoginTime() {
+        return lastLoginTime;
+    }
+
+    public void setLastLoginTime(Date lastLoginTime) {
+        this.lastLoginTime = lastLoginTime;
     }
 }
