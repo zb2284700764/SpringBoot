@@ -239,19 +239,23 @@
 
         <div class="navbar-default sidebar" role="navigation">
             <div class="sidebar-nav navbar-collapse">
-                <ul class="nav" id="side-menu">
 
+                <!-- 菜单 -->
+                <ul class="nav" id="side-menu">
                     <li>
-                        <a href="index.html"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                        <a th:href="@{/index}"><i class="fa fa-dashboard fa-fw"></i> 首页</a>
                     </li>
                     <li>
-                        <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Charts<span class="fa arrow"></span></a>
+                        <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> 系统管理<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <a href="flot.html">Flot Charts</a>
+                                <a th:href="@{/a/sys/user/findAllUser}" target="mainFrame">用户管理</a>
                             </li>
                             <li>
-                                <a href="morris.html">Morris.js Charts</a>
+                                <a href="morris.html">角色管理</a>
+                            </li>
+                            <li>
+                                <a href="morris.html">菜单管理</a>
                             </li>
                         </ul>
                         <!-- /.nav-second-level -->
@@ -338,10 +342,11 @@
 <!-- 主体内容，各个子页面自己实现 -->
 <div id="page-wrapper">
     <!-- data-layout-fragment="content" 标签之外的内容显示在首页上，标签内的内容不会显示 -->
-    <div data-layout-fragment="content">
+    <iframe id="mainFrame" name="mainFrame" src="" style="overflow:visible;" scrolling="yes" frameborder="no" width="100%" height="650">
+
         data-layout-fragment="content" 标签之外的内容显示在首页上，标签内的内容不会显示<br/>
         data-layout-fragment="content" 标签之外的内容就是菜单
-    </div>
+    </iframe>
 </div>
 
 
