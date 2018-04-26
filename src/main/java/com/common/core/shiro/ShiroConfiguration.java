@@ -3,12 +3,14 @@ package com.common.core.shiro;
 import com.common.core.shiro.cache.RedisCacheManager;
 import com.common.core.shiro.session.RedisSessionDao;
 import com.google.common.collect.Maps;
+import org.apache.shiro.cache.MemoryConstrainedCacheManager;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
+import org.apache.shiro.web.filter.authc.LogoutFilter;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
@@ -19,6 +21,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Properties;
 
@@ -139,22 +142,23 @@ public class ShiroConfiguration {
         shiroFilterFactoryBean.setLoginUrl("/a/login");
 
         // 登录成功默认跳转页面，不配置则跳转至”/”。如果登陆前点击的一个需要登录的页面，则在登录自动跳转到那个需要登录的页面。不跳转到此
-        shiroFilterFactoryBean.setSuccessUrl("/a?login");
+        shiroFilterFactoryBean.setSuccessUrl("/a/index");
 
         // 没有权限默认跳转的页面
 //        shiroFilterFactoryBean.setUnauthorizedUrl("/a/defaultIndex");
 
         // 权限过滤的页面
-        LinkedHashMap filterChainDefinitionMap = Maps.newLinkedHashMap();
+        LinkedHashMap<String, String> filterChainDefinitionMap = Maps.newLinkedHashMap();
 
         filterChainDefinitionMap.put("/static/**", "anon"); // anon 表示可以匿名访问
-//        filterChainDefinitionMap.put("/a/**", "user"); // user 用户拦截器 用户已经身份验证/记住我登录的都可
-//        filterChainDefinitionMap.put("/a/loginOut", "logout");
-        filterChainDefinitionMap.put("/a/**", "authc"); // authc 表示需要认证才可以访问
+        filterChainDefinitionMap.put("/a/login", "authc"); // authc 表示需要认证才可以访问
+        filterChainDefinitionMap.put("/a/logout", "logout");
+        filterChainDefinitionMap.put("/a/**", "user"); // user 用户拦截器 用户已经身份验证/记住我登录的都可
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
 
         return shiroFilterFactoryBean;
     }
+
 
 
     /**
@@ -168,8 +172,10 @@ public class ShiroConfiguration {
         Properties properties = new Properties();
 
         // key 为异常类，value 为直接对应的页面
-        properties.setProperty("org.apache.shiro.authz.UnauthorizedException", "/sys/defaultIndex");
+        properties.setProperty("org.apache.shiro.authz.UnauthorizedException", "/common/error/403");
         simpleMappingExceptionResolver.setExceptionMappings(properties);
         return simpleMappingExceptionResolver;
     }
+
+
 }

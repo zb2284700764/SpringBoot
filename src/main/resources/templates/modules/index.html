@@ -1,9 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      data-layout-decorator="common/layout">
-
-
+      data-layout-decorator="common/layout/layout">
 <head>
+    <title>首页</title>
 </head>
 <body>
 
@@ -364,47 +363,47 @@
                             <a href="#" class="list-group-item">
                                 <i class="fa fa-comment fa-fw"></i> New Comment
                                 <span class="pull-right text-muted small"><em>4 minutes ago</em>
-                                    </span>
+                                </span>
                             </a>
                             <a href="#" class="list-group-item">
                                 <i class="fa fa-twitter fa-fw"></i> 3 New Followers
                                 <span class="pull-right text-muted small"><em>12 minutes ago</em>
-                                    </span>
+                                </span>
                             </a>
                             <a href="#" class="list-group-item">
                                 <i class="fa fa-envelope fa-fw"></i> Message Sent
                                 <span class="pull-right text-muted small"><em>27 minutes ago</em>
-                                    </span>
+                                </span>
                             </a>
                             <a href="#" class="list-group-item">
                                 <i class="fa fa-tasks fa-fw"></i> New Task
                                 <span class="pull-right text-muted small"><em>43 minutes ago</em>
-                                    </span>
+                                </span>
                             </a>
                             <a href="#" class="list-group-item">
                                 <i class="fa fa-upload fa-fw"></i> Server Rebooted
                                 <span class="pull-right text-muted small"><em>11:32 AM</em>
-                                    </span>
+                                </span>
                             </a>
                             <a href="#" class="list-group-item">
                                 <i class="fa fa-bolt fa-fw"></i> Server Crashed!
                                 <span class="pull-right text-muted small"><em>11:13 AM</em>
-                                    </span>
+                                </span>
                             </a>
                             <a href="#" class="list-group-item">
                                 <i class="fa fa-warning fa-fw"></i> Server Not Responding
                                 <span class="pull-right text-muted small"><em>10:57 AM</em>
-                                    </span>
+                                </span>
                             </a>
                             <a href="#" class="list-group-item">
                                 <i class="fa fa-shopping-cart fa-fw"></i> New Order Placed
                                 <span class="pull-right text-muted small"><em>9:49 AM</em>
-                                    </span>
+                                </span>
                             </a>
                             <a href="#" class="list-group-item">
                                 <i class="fa fa-money fa-fw"></i> Payment Received
                                 <span class="pull-right text-muted small"><em>Yesterday</em>
-                                    </span>
+                                </span>
                             </a>
                         </div>
                         <!-- /.list-group -->
@@ -465,9 +464,9 @@
                     <div class="panel-body">
                         <ul class="chat">
                             <li class="left clearfix">
-                                    <span class="chat-img pull-left">
-                                        <img src="http://placehold.it/50/55C1E7/fff" alt="User Avatar" class="img-circle" />
-                                    </span>
+                                <span class="chat-img pull-left">
+                                    <img src="http://placehold.it/50/55C1E7/fff" alt="User Avatar" class="img-circle" />
+                                </span>
                                 <div class="chat-body clearfix">
                                     <div class="header">
                                         <strong class="primary-font">Jack Sparrow</strong>
@@ -481,9 +480,9 @@
                                 </div>
                             </li>
                             <li class="right clearfix">
-                                    <span class="chat-img pull-right">
-                                        <img src="http://placehold.it/50/FA6F57/fff" alt="User Avatar" class="img-circle" />
-                                    </span>
+                                <span class="chat-img pull-right">
+                                    <img src="http://placehold.it/50/FA6F57/fff" alt="User Avatar" class="img-circle" />
+                                </span>
                                 <div class="chat-body clearfix">
                                     <div class="header">
                                         <small class=" text-muted">
@@ -496,9 +495,9 @@
                                 </div>
                             </li>
                             <li class="left clearfix">
-                                    <span class="chat-img pull-left">
-                                        <img src="http://placehold.it/50/55C1E7/fff" alt="User Avatar" class="img-circle" />
-                                    </span>
+                                <span class="chat-img pull-left">
+                                    <img src="http://placehold.it/50/55C1E7/fff" alt="User Avatar" class="img-circle" />
+                                </span>
                                 <div class="chat-body clearfix">
                                     <div class="header">
                                         <strong class="primary-font">Jack Sparrow</strong>
@@ -511,9 +510,9 @@
                                 </div>
                             </li>
                             <li class="right clearfix">
-                                    <span class="chat-img pull-right">
-                                        <img src="http://placehold.it/50/FA6F57/fff" alt="User Avatar" class="img-circle" />
-                                    </span>
+                                <span class="chat-img pull-right">
+                                    <img src="http://placehold.it/50/FA6F57/fff" alt="User Avatar" class="img-circle" />
+                                </span>
                                 <div class="chat-body clearfix">
                                     <div class="header">
                                         <small class=" text-muted">
@@ -532,10 +531,10 @@
                         <div class="input-group">
                             <input id="btn-input" type="text" class="form-control input-sm" placeholder="Type your message here..." />
                             <span class="input-group-btn">
-                                    <button class="btn btn-warning btn-sm" id="btn-chat">
-                                        Send
-                                    </button>
-                                </span>
+                                <button class="btn btn-warning btn-sm" id="btn-chat">
+                                    Send
+                                </button>
+                            </span>
                         </div>
                     </div>
                     <!-- /.panel-footer -->
@@ -546,7 +545,14 @@
         </div>
         <!-- /.row -->
         More Templates <a href="http://www.cssmoban.com/" target="_blank" title="模板之家">模板之家</a> - Collect from <a href="http://www.cssmoban.com/" title="网页模板" target="_blank">网页模板</a>
+
     </div>
+
+
+    <script type="text/javascript" th:inline="javascript" data-layout-fragment="js">
+
+
+    </script>
 
 </body>
 </html>

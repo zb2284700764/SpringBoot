@@ -1,18 +1,118 @@
 <!DOCTYPE html>
 <html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
-<head th:include="common/common_css :: css">
+<head>
     <title>登录</title>
+
+    <!-- CSS Bootstrap -->
+    <link th:href="@{/bootstrap/3.3.7/css/bootstrap.min.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{/login/font-awesome/css/font-awesome.min.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{/login/css/form-elements.css}" rel="stylesheet" type="text/css">
+    <link th:href="@{/login/css/style.css}" rel="stylesheet" type="text/css">
+
+    <!-- Favicon and touch icons -->
+    <link rel="shortcut icon" th:href="@{/login/ico/favicon.png}">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" th:href="@{/login/ico/apple-touch-icon-144-precomposed.png}">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" th:href="@{/login/ico/apple-touch-icon-114-precomposed.png}">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" th:href="@{/login/ico/apple-touch-icon-72-precomposed.png}">
+    <link rel="apple-touch-icon-precomposed" th:href="@{/login/ico/apple-touch-icon-57-precomposed.png}">
+
 </head>
 
 
 <body>
-<h1>登录</h1>
-<form th:method="post" th:action="@{/a/login}">
-    登录名:<input type="text" placeholder="登录名" name="username"/><br/>
-    密&nbsp;码:<input type="text" placeholder="密码" name="password"/><br/>
-    <input type="checkbox" name="rememberMe"/>记住我<br>
-    <input type="submit" value="登&nbsp;&nbsp;录"/><br/>
-</form>
+    <!-- Top content -->
+    <div class="top-content">
+        <div class="inner-bg">
+            <div class="container">
+                <!-- 登录块 -->
+                <div class="row">
+                    <div class="col-sm-6 col-sm-offset-3 form-box">
+                        <div class="form-top">
+                            <div class="form-top-left">
+                                <h3>Login to our site</h3>
+                                <p>Enter your username and password to log on:</p>
+                            </div>
+                            <div class="form-top-right">
+                                <i class="fa fa-key"></i>
+                            </div>
+                        </div>
+                        <div class="form-bottom">
+                            <form role="form"  th:method="post" th:action="@{/a/login}" class="login-form">
+                                <div class="form-group">
+                                    <label class="sr-only" for="form-username">Username</label>
+                                    <input type="text" th:name="username" placeholder="Username..." class="form-username form-control" id="form-username" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="sr-only" for="form-password">Password</label>
+                                    <input type="password"  th:name="password" placeholder="Password..." class="form-password form-control" id="form-password" />
+                                </div>
+                                <div class="form-group">
+                                    <label>
+                                        <input type="checkbox" th:name="rememberMe" />记住我
+                                    </label>
+                                </div>
+                                <button type="submit" class="btn">登&nbsp;&nbsp;录</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
 
+                <!-- 扩展登录块 -->
+                <div class="row">
+                    <div class="col-sm-6 col-sm-offset-3 social-login">
+                        <h3>...or login with:</h3>
+                        <div class="social-login-buttons">
+                            <a class="btn btn-link-1 btn-link-1-facebook" href="#">
+                                <i class="fa fa-facebook"></i> Facebook
+                            </a>
+                            <a class="btn btn-link-1 btn-link-1-twitter" href="#">
+                                <i class="fa fa-twitter"></i> Twitter
+                            </a>
+                            <a class="btn btn-link-1 btn-link-1-google-plus" href="#">
+                                <i class="fa fa-google-plus"></i> Google Plus
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Jquery -->
+    <script th:src="@{/jquery/3.1.1/jquery.min.js}"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script th:src="@{/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+    <script th:src="@{/login/js/jquery.backstretch.min.js}"></script>
+
+
+    <script type="text/javascript" th:inline="javascript">
+
+        <!-- 背景插件设置图片 -->
+        $.backstretch(/*[[@{/login/img/backgrounds/1.jpg}]]*/);
+
+        $('.login-form input[type="text"], .login-form input[type="password"], .login-form textarea').on('focus', function() {
+            $(this).removeClass('input-error');
+        });
+
+        $('.login-form').on('submit', function(e) {
+
+            $(this).find('input[type="text"], input[type="password"], textarea').each(function(){
+                if( $(this).val() == "" ) {
+                    e.preventDefault();
+                    $(this).addClass('input-error');
+                }
+                else {
+                    $(this).removeClass('input-error');
+                }
+            });
+
+        });
+
+    </script>
+
+    <!--[if lt IE 10]>
+    <script th:src="@{/login/js/placeholder.js}"></script>
+    <![endif]-->
 </body>
 </html>

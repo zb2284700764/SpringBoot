@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
 
-    <div th:fragment="js">
+    <th:block th:fragment="js">
         <!-- Jquery -->
-        <script th:src="@{/jquery/3.1.1/jquery-3.1.1.min.js}"></script>
+        <script th:src="@{/jquery/3.1.1/jquery.min.js}"></script>
 
         <!-- Bootstrap Core JavaScript -->
         <script th:src="@{/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
@@ -12,13 +12,13 @@
         <script th:src="@{/metisMenu/metisMenu.min.js}"></script>
 
         <!-- Morris Charts JavaScript 报表插件 -->
-        <script th:src="@{/reportForm/raphael/raphael.min.js}"></script>
-        <script th:src="@{/reportForm/morrisjs/morris.min.js}"></script>
-        <script th:src="@{/data/morris-data.js}"></script>
+        <!--<script th:src="@{/reportForm/raphael/raphael.min.js}"></script>-->
+        <!--<script th:src="@{/reportForm/morrisjs/morris.min.js}"></script>-->
+        <!--<script th:src="@{/data/morris-data.js}"></script>-->
 
-        <!-- Custom Theme JavaScript -->
+        <!-- Custom Theme JavaScript sb-admin 自己 js -->
         <script th:src="@{/sb-admin-2/js/sb-admin-2.min.js}"></script>
 
-    </div>
+    </th:block>
 
 </html>

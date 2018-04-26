@@ -10,12 +10,16 @@ import com.modules.sys.entity.User;
 import com.modules.sys.service.MenuService;
 import com.modules.sys.service.RoleService;
 import com.modules.sys.service.UserService;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.Permission;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -101,7 +105,6 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 
         return info;
     }
-
 
     /**
      * @PostConstruct web 容器启动的时候在 servlet 加载之后在 init 方法之前执行

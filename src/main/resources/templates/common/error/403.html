@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      data-layout-decorator="common/layout/layout">
+<head>
+    <title>没有权限访问</title>
+</head>
+<body>
+
+    <!-- data-layout-fragment="content" 标签之外的内容就是layout.html的内容，这个标签之内的部分不会被替换 -->
+    <div data-layout-fragment="content">
+        <h1>操作权限不足.</h1>
+        <div><a href="javascript:" onclick="history.go(-1);" class="btn">返回上一页</a></div>
+    </div>
+
+</body>
+</html>

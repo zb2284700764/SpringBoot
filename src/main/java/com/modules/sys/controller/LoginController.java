@@ -1,10 +1,19 @@
 package com.modules.sys.controller;
 
 import com.common.controller.BaseController;
+import com.google.common.collect.Lists;
+import com.modules.sys.entity.Menu;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.AccountException;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 /**
  * 后台登录 Controller
@@ -14,14 +23,19 @@ public class LoginController extends BaseController {
 
     /**
      * 登录
-     *
-     * @date 2017年7月10日 下午4:27:19
+     * @param modelAndView
+     * @return
      */
     @RequestMapping(value = "${adminPath}/login")
-    public String login() {
+    public ModelAndView login(ModelAndView modelAndView) {
 
-//		UsernamePasswordToken token = new UsernamePasswordToken(loginName, password);
-//		subject.login(token); // 模拟登录
+//		UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+//        try {
+//            subject.login(token); // 模拟登录
+//        } catch (AccountException e) {
+//            modelAndView.addObject("message", "帐号或密码不正确！");
+//            e.printStackTrace();
+//        }
 //		subject.logout(); // 模拟退出
 
         Subject subject = SecurityUtils.getSubject();
@@ -29,35 +43,42 @@ public class LoginController extends BaseController {
         subject.getSession().getId();
         // 登录认证通过
         if (principal != null) {
-            // 转发到 UserController 查询用户列表
-            return "redirect:" + adminPath + "/sys/user/findAllUser";
+            // 查询菜单
+
+            List<Menu> menuList = Lists.newArrayList();
+            Menu menu = new Menu();
+            menu.setName("用户管理");
+            menuList.add(menu);
+            modelAndView.addObject("menuList", menuList);
+            modelAndView.setViewName("modules/index");
+
         } else {
-            return "modules/sys/login";
+            modelAndView.setViewName("modules/sys/login");
         }
+        // 跳转到首页
+        return modelAndView;
     }
 
     /**
-     * 退出登录
-     *
-     * @date 2017年7月10日 下午4:27:19
+     * 退出登录之后会跳转到此方法
+     * @return
      */
-    @RequestMapping(value = "${adminPath}/loginOut")
-    public String loginOut() {
-        Subject subject = SecurityUtils.getSubject();
-        subject.logout();
-        return "modules/sys/login";
-    }
+    @RequestMapping(value = "/")
+    public String login() {
 
+        return "redirect:${adminPath}/login";
+    }
 
     /**
      * 默认页面
      *
      * @date 2017年7月6日 上午10:21:20
      */
-    @RequestMapping("index")
+    @RequestMapping("${adminPath}/index")
     public String defaultIndex() {
 
         return "modules/index";
     }
+
 }
 
