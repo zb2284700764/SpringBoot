@@ -7,6 +7,7 @@ import org.apache.shiro.cache.MemoryConstrainedCacheManager;
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.session.mgt.SessionManager;
+import org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
@@ -37,9 +38,20 @@ public class ShiroConfiguration {
     }
 
 
+    @Bean(name = "sessionIdGenerator")
+    public JavaUuidSessionIdGenerator sessionIdGenerator(){
+        JavaUuidSessionIdGenerator sessionIdGenerator = new JavaUuidSessionIdGenerator();
+        return sessionIdGenerator;
+    }
+
+
     @Bean(name = "redisSessionDao")
     public RedisSessionDao redisSessionDao() {
-        return new RedisSessionDao();
+        RedisSessionDao redisSessionDao = new RedisSessionDao();
+        redisSessionDao.setSessionIdGenerator(sessionIdGenerator());
+        redisSessionDao.setActiveSessionsCacheName("shiro-activeSessionCache");
+        redisSessionDao.setCacheManager(redisCacheManager());
+        return redisSessionDao;
     }
 
 
@@ -55,11 +67,12 @@ public class ShiroConfiguration {
         sessionManager.setSessionDAO(redisSessionDao());
         // session 失效时间(毫秒)
         sessionManager.setGlobalSessionTimeout(30 * 60 * 1000);
-        sessionManager.setCacheManager(redisCacheManager());
-
-        sessionManager.setSessionIdUrlRewritingEnabled(false);
+        // 定时清理失效会话, 清理用户直接关闭浏览器造成的孤立会话
+        sessionManager.setSessionValidationInterval(120 * 1000);
         // 定时检查 session 失效
         sessionManager.setSessionValidationSchedulerEnabled(true);
+//        sessionManager.setCacheManager(redisCacheManager());
+        sessionManager.setSessionIdUrlRewritingEnabled(false);
         return sessionManager;
     }
 
@@ -87,13 +100,18 @@ public class ShiroConfiguration {
         System.out.println("--------------shiro securityManager 已经加载----------------");
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         // 设置 realm 为自定义实现 AuthorizingRealm 的 realm
+        systemAuthorizingRealm.setCachingEnabled(true);
+//        systemAuthorizingRealm.setAuthenticationCachingEnabled(true);
+//        systemAuthorizingRealm.setAuthenticationCacheName("authenticationCache");
+        systemAuthorizingRealm.setAuthorizationCachingEnabled(true);
+        systemAuthorizingRealm.setAuthorizationCacheName("authorizationCache");
         securityManager.setRealm(systemAuthorizingRealm);
-
-        // 设置 shiro 缓存管理器
-        securityManager.setCacheManager(redisCacheManager());
 
         // 设置 shiro 会话管理器
         securityManager.setSessionManager(sessionManager());
+
+        // 设置 shiro 缓存管理器
+        securityManager.setCacheManager(redisCacheManager());
 
         // 设置记住我管理器
         securityManager.setRememberMeManager(rememberMeManager());
@@ -116,16 +134,15 @@ public class ShiroConfiguration {
         authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
         return authorizationAttributeSourceAdvisor;
     }
-
     /**
      * DefaultAdvisorAutoProxyCreator，Spring的一个bean，由 Advisor 决定对哪些类的方法进行AOP代理
      * AOP式方法级权限检查
      */
     @Bean
     public DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator() {
-        DefaultAdvisorAutoProxyCreator defaultAAP = new DefaultAdvisorAutoProxyCreator();
-        defaultAAP.setProxyTargetClass(true);
-        return defaultAAP;
+        DefaultAdvisorAutoProxyCreator defaultAOP = new DefaultAdvisorAutoProxyCreator();
+        defaultAOP.setProxyTargetClass(true);
+        return defaultAOP;
     }
 
 

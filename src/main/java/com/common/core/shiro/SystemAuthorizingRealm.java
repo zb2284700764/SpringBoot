@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.io.Serializable;
 import java.util.List;
 
 @Service
@@ -61,7 +62,7 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
         // 密码加密
         byte[] salt = Encodes.decodeHex(user.getPassword().substring(0, 16));
         // 登录认证
-        return new SimpleAuthenticationInfo(user, // 用户名
+        return new SimpleAuthenticationInfo(new Principal(user), // 用户名
                                             user.getPassword().substring(16), // 密码
                                             ByteSource.Util.bytes(salt), // salt = 加密之后的密码
                                             getName() // realm name
@@ -76,13 +77,13 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
 
         // 获取当前已经登录的用户
-        User user = (User) getAvailablePrincipal(principals);
-        System.out.println("登录之后访问权限控制的菜单或内容时进行授权--> doGetAuthorizationInfo " + user.getLoginName());
+        Principal principal = (Principal) getAvailablePrincipal(principals);
+        System.out.println("登录之后访问权限控制的菜单或内容时进行授权--> doGetAuthorizationInfo " + principal.getLoginName());
 
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
 
         // 根据 userId 查询对应的角色
-        List<Role> roles = roleService.findRoleByUserId(user.getId());
+        List<Role> roles = roleService.findRoleByUserId(principal.getId());
         // 角色集合
         List<String> rolesENname = Lists.newArrayList();
         for (Role role : roles) {
@@ -93,7 +94,7 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
         info.addRoles(rolesENname);
 
         // 根据 userId 查询对应的菜单权限
-        List<Menu> menus = menuService.findMenuByUserId(user.getId());
+        List<Menu> menus = menuService.findMenuByUserId(principal.getId());
         // 菜单权限集合
         List<String> permissions = Lists.newArrayList();
         for(Menu menu : menus){
@@ -118,5 +119,43 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
     }
 
 
+    @Override
+    protected void clearCachedAuthorizationInfo(PrincipalCollection principals) {
+        super.clearCachedAuthorizationInfo(principals);
+    }
 
+    /**
+     * 授权用户信息
+     */
+    public static class Principal implements Serializable {
+
+        private String id; // 编号
+        private String loginName; // 登录名
+        private String name; // 姓名
+
+
+        public Principal(User user) {
+            this.id = user.getId();
+            this.loginName = user.getLoginName();
+            this.name = user.getName();
+        }
+
+
+        public String getId() {
+            return id;
+        }
+
+        public String getLoginName() {
+            return loginName;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        @Override
+        public String toString() {
+            return id;
+        }
+    }
 }

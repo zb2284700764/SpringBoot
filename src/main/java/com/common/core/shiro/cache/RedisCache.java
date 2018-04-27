@@ -27,17 +27,24 @@ public class RedisCache<K, V> implements Cache<K, V> {
 
     @Override
     public V get(K k) throws CacheException {
+        if (k == null) {
+            return null;
+        }
+
         // 对应的 cache key 设置失效时间
-        redisTemplate.boundValueOps(getCacheKey(k)).expire(1800, TimeUnit.SECONDS);
+//        redisTemplate.boundValueOps(getCacheKey(k)).expire(1800, TimeUnit.SECONDS);
         // 获取对应 key 的值，以绑定指定key的方式，操作具有简单值的条目
         return redisTemplate.boundValueOps(getCacheKey(k)).get();
     }
 
     @Override
     public V put(K k, V v) throws CacheException {
-        V old = get(k);
+        if (k == null) {
+            return null;
+        }
+
         redisTemplate.boundValueOps(getCacheKey(k)).set(v);
-        return old;
+        return v;
     }
 
     @Override
