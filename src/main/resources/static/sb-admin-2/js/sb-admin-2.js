@@ -30,11 +30,11 @@ $(function() {
     });
 
     var url = window.location;
-    // var element = $('ul.nav a').filter(function() {
-    //     return this.href == url;
-    // }).addClass('active').parent().parent().addClass('in').parent();
-    var element = $('ul.nav a').filter(function() {
-        return this.href == url;
+    var pathname = url.href.substring(0, url.href.lastIndexOf('/'));
+
+    var element = $('#side-menu a').filter(function() {
+        var pathHref = this.href.substring(0, this.href.lastIndexOf('/'));
+        return pathname == pathHref;
     }).addClass('active').parent();
 
     while (true) {
