@@ -4,12 +4,8 @@ import com.common.controller.BaseController;
 import com.google.common.collect.Lists;
 import com.modules.sys.entity.Menu;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AccountException;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -29,15 +25,6 @@ public class LoginController extends BaseController {
      */
     @RequestMapping(value = "${adminPath}/login")
     public ModelAndView login(ModelAndView modelAndView) {
-
-//		UsernamePasswordToken token = new UsernamePasswordToken(username, password);
-//        try {
-//            subject.login(token); // 模拟登录
-//        } catch (AccountException e) {
-//            modelAndView.addObject("message", "帐号或密码不正确！");
-//            e.printStackTrace();
-//        }
-//		subject.logout(); // 模拟退出
 
         Subject subject = SecurityUtils.getSubject();
         Object principal = subject.getPrincipal();
