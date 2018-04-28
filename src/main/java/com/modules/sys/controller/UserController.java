@@ -13,7 +13,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
-@Controller
+@RestController
 @RequestMapping("${adminPath}/sys/user")
 public class UserController extends BaseController {
 
@@ -22,13 +22,21 @@ public class UserController extends BaseController {
     @Autowired
     private UserService userService;
 
+    @RequestMapping("/ajaxFindAllUser")
+    @RequiresPermissions("sys:user:view")
+    public Object ajaxFindAllUser() {
+        List<User> userList = userService.findAllUser();
+
+        return userList;
+    }
+
     /**
      * 增加用户
      *
      * @param user
      * @return
      */
-    @RequiresPermissions("sys:user:add")
+    @RequiresPermissions("sys:user:view")
     @RequestMapping("/save")
     public String save(@ModelAttribute(value = "user") User user) {
 
