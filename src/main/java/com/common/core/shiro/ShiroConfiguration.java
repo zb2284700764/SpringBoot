@@ -17,13 +17,17 @@ import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
 import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.handler.SimpleMappingExceptionResolver;
 
+import javax.servlet.Filter;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -31,6 +35,10 @@ import java.util.Properties;
  */
 @Configuration
 public class ShiroConfiguration {
+
+
+//    @Qualifier("formAuthenticationFilter")
+//    FormAuthenticationFilter formAuthenticationFilter;
 
     @Bean(name = "lifecycleBeanPostProcessor")
     public LifecycleBeanPostProcessor getLifecycleBeanPostProcessor() {
@@ -146,6 +154,18 @@ public class ShiroConfiguration {
     }
 
 
+    /**
+     * 自定义实现 FormAuthenticationFilter 这个 Filter 之后，需要加入让自定义的 Filter 在 Shiro 的 Filter 加载之后再加载
+     * @param filter
+     * @return
+     */
+    @Bean
+    public FilterRegistrationBean registration(FormAuthenticationFilter filter) {
+        FilterRegistrationBean registration = new FilterRegistrationBean(filter);
+        registration.setEnabled(false);
+        return registration;
+    }
+
     @Bean
     public ShiroFilterFactoryBean shiroFilter(@Qualifier("securityManager") SecurityManager securityManager) {
         System.out.println("--------------shiroFilter 已加载----------------");
@@ -160,6 +180,9 @@ public class ShiroConfiguration {
 
         // 登录成功默认跳转页面，不配置则跳转至”/”。如果登陆前点击的一个需要登录的页面，则在登录自动跳转到那个需要登录的页面。不跳转到此
         shiroFilterFactoryBean.setSuccessUrl("/a/index");
+        Map<String,Filter> filters = shiroFilterFactoryBean.getFilters();
+        filters.put("authc", new FormAuthenticationFilter());
+        shiroFilterFactoryBean.setFilters(filters);
 
         // 没有权限默认跳转的页面
 //        shiroFilterFactoryBean.setUnauthorizedUrl("/a/defaultIndex");

@@ -48,8 +48,13 @@
                                 </div>
                                 <div class="form-group">
                                     <label>
-                                        <input type="checkbox" th:name="rememberMe" />记住我
+                                        <input type="checkbox" th:name="rememberMe" />记住我<br/>
                                     </label>
+                                </div>
+                                <div th:class="${message} != null ? 'form-group' : 'hidden'">
+                                    <div class="alert alert-danger">
+                                        <span th:text="${message}"></span>
+                                    </div>
                                 </div>
                                 <button type="submit" class="btn">登&nbsp;&nbsp;录</button>
                             </form>
@@ -77,6 +82,7 @@
             </div>
         </div>
     </div>
+
 
 
     <!-- Jquery -->
@@ -111,8 +117,5 @@
 
     </script>
 
-    <!--[if lt IE 10]>
-    <script th:src="@{/login/js/placeholder.js}"></script>
-    <![endif]-->
 </body>
 </html>

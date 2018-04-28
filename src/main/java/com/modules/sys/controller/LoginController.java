@@ -23,6 +23,7 @@ public class LoginController extends BaseController {
 
     /**
      * 登录
+     *
      * @param modelAndView
      * @return
      */
@@ -61,12 +62,13 @@ public class LoginController extends BaseController {
 
     /**
      * 退出登录之后会跳转到此方法
+     *
      * @return
      */
     @RequestMapping(value = "/")
     public String login() {
 
-        return "redirect:${adminPath}/login";
+        return "redirect:" + adminPath + "/login";
     }
 
     /**
