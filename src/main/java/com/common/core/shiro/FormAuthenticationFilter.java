@@ -5,6 +5,7 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
+import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletRequest;
@@ -17,6 +18,11 @@ import javax.servlet.ServletResponse;
 public class FormAuthenticationFilter extends org.apache.shiro.web.filter.authc.FormAuthenticationFilter {
 
     private static final String DEFAULT_MESSAGE_PARAM = "message";
+
+    @Override
+    protected boolean onLoginSuccess(AuthenticationToken token, Subject subject, ServletRequest request, ServletResponse response) throws Exception {
+        return super.onLoginSuccess(token, subject, request, response);
+    }
 
     /**
      * 登录失败调用事件

@@ -33,6 +33,7 @@ $(function() {
     var pathname = url.href.substring(0, url.href.lastIndexOf('/'));
 
     var element = $('#side-menu a').filter(function() {
+        // var pathHref = this.dataset.hiddenHref.substring(0, this.dataset.hiddenHref.lastIndexOf('/'));
         var pathHref = this.href.substring(0, this.href.lastIndexOf('/'));
         return pathname == pathHref;
     }).addClass('active').parent();
