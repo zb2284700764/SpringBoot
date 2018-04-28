@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+
+<h4>用户列表</h4>
+
+<table class="table table-bordered">
+    <tr>
+        <td>ID</td>
+        <td>登录名</td>
+        <td>密码</td>
+        <td>姓名</td>
+        <td>是否禁止登录</td>
+        <td>操作</td>
+    </tr>
+    <tr th:each="user,userStat : ${userList}">
+        <td th:text="${user.id }" ></td>
+        <td th:text="${user.loginName }" ></td>
+        <td th:text="${user.password }" ></td>
+        <td th:text="${user.name }" ></td>
+        <td th:text="${user.loginFlag eq 0 ? '否' : '是' }" ></td>
+        <td>
+            <button type="button" class="btn btn-primary btn-xs">修改</button>
+            <button type="button" class="btn btn-danger btn-xs">删除</button>
+
+            <th:block th:if="${user.loginFlag eq 0 }">
+                <button type="button" class="btn btn-link btn-xs">禁用</button>
+            </th:block>
+            <th:block th:if="${user.loginFlag eq 1 }">
+                <button type="button" class="btn btn-link btn-xs">启用</button>
+            </th:block>
+
+        </td>
+    </tr>
+</table>
+
+<table class="table table-bordered">
+    <tr>
+        <td>菜单</td>
+    </tr>
+    <tr th:each="menu,menuState : ${menuList}">
+        <td>
+            <a th:href="#" th:text="${menu.name}" ></a>
+        </td>
+    </tr>
+</table>
+
+<div>
+    <button id="addUserBtn" type="submit" class="btn btn-default">增加用户</button>
+</div>
+
+<div>
+    <button type="button" class="btn btn-default">Default</button>
+    <button type="button" class="btn btn-primary btn-xs">Primary</button>
+    <button type="button" class="btn btn-success btn-sm">Success</button>
+    <button type="button" class="btn btn-info btn-lg">Info</button>
+    <button type="button" class="btn btn-warning">Warning</button>
+    <button type="button" class="btn btn-danger">Danger</button>
+    <button type="button" class="btn btn-link">Link</button>
+    <button type="button" class="btn btn-primary" disabled="disabled">Primary button</button>
+    <button type="button" class="btn btn-default" disabled="disabled">Button</button>
+</div>
+
+<script type="text/javascript">
+
+    $(function(){
+       $("#addUserBtn").click(function(){
+           $.ajax({
+               url:"/a/sys/user/gotoUserForm",
+               type:"get",
+               dataType:"html",
+               success:function(data){
+                   $("#content").html(data)
+               }
+           });
+       });
+    });
+</script>
+
+</html>
