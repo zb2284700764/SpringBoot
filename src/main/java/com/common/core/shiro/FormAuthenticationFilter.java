@@ -49,39 +49,4 @@ public class FormAuthenticationFilter extends org.apache.shiro.web.filter.authc.
         return true;
     }
 
-    @Override
-    protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
-        if (isLoginRequest(request, response)) {
-            if (isLoginSubmission(request, response)) {
-                return executeLogin(request, response);
-            } else {
-                HttpServletRequest httpServletRequest = WebUtils.toHttp(request);
-                if (isAjax(httpServletRequest)) {
-                    HttpServletResponse httpServletResponse = WebUtils.toHttp(response);
-//                    httpServletResponse.sendError();
-                    return false;
-                }
-                return true;
-            }
-        } else {
-            saveRequestAndRedirectToLogin(request, response);
-            return false;
-        }
-    }
-
-    /**
-     * 是否是Ajax请求
-     * @param request
-     * @return
-     */
-    protected boolean isAjax(ServletRequest request){
-        String header = ((HttpServletRequest) request).getHeader("X-Requested-With");
-        if("XMLHttpRequest".equalsIgnoreCase(header)){
-            System.out.println("当前请求为Ajax请求");
-            return Boolean.TRUE;
-        }
-        System.out.println("非Ajax请求");
-        return Boolean.FALSE;
-    }
-
 }
