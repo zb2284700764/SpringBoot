@@ -17,6 +17,10 @@ import java.io.Serializable;
 import java.util.Deque;
 import java.util.LinkedList;
 
+/**
+ * 登录踢出 filter 用这个 filter 需要在 ShiroConfiguration 类中加入 filter
+ * 然后在拦截的 url 上加入这个 filter
+ */
 public class KickoutSessionFilter extends AccessControlFilter{
     private String kickoutUrl; //踢出后到的地址
     private boolean kickoutAfter = false; //踢出之前登录的/之后登录的用户 默认踢出之前登录的用户
@@ -54,7 +58,7 @@ public class KickoutSessionFilter extends AccessControlFilter{
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
         Subject subject = getSubject(request, response);
         if(!subject.isAuthenticated() && !subject.isRemembered()) {
-            //如果没有登录，直接进行之后的流程
+            // 返回 true 表示该拦截器已经处理完成，还需要后面的拦截器接着处理
             return true;
         }
 
@@ -103,8 +107,9 @@ public class KickoutSessionFilter extends AccessControlFilter{
                 subject.logout();
             } catch (Exception e) { //ignore
             }
-            saveRequest(request);
-            WebUtils.issueRedirect(request, response, getLoginUrl());
+//            saveRequest(request);
+//            WebUtils.issueRedirect(request, response, getLoginUrl());
+            saveRequestAndRedirectToLogin(request, response);
             return false;
         }
 
