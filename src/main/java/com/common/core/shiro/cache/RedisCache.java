@@ -1,12 +1,13 @@
 package com.common.core.shiro.cache;
 
+import com.google.common.collect.Lists;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 /**
  * 自定义缓存类
@@ -20,7 +21,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
     private String cacheKey;
 
 
-    public RedisCache(String cacheKey, RedisTemplate redisTemplate) {
+    RedisCache(String cacheKey, RedisTemplate redisTemplate) {
         this.cacheKey = "shiro-cache:" + cacheKey + ":";
         this.redisTemplate = redisTemplate;
     }
@@ -71,7 +72,17 @@ public class RedisCache<K, V> implements Cache<K, V> {
 
     @Override
     public Collection<V> values() {
-        return null;
+        Set<K> keys = redisTemplate.keys((K) (cacheKey + "*"));
+        if (keys != null) {
+            List<V> list = Lists.newArrayList();
+            for (K k : keys) {
+                V v = redisTemplate.boundValueOps(k).get();
+                list.add(v);
+            }
+            return list;
+        } else {
+            return null;
+        }
     }
 
     private K getCacheKey(Object k) {
