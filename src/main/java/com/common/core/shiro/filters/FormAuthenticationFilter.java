@@ -1,18 +1,16 @@
-package com.common.core.shiro;
+package com.common.core.shiro.filters;
 
+import com.common.config.Global;
 import com.common.util.StringUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.subject.Subject;
-import org.apache.shiro.web.util.WebUtils;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * 表单验证（包含验证码）过滤类
@@ -20,7 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 @Service
 public class FormAuthenticationFilter extends org.apache.shiro.web.filter.authc.FormAuthenticationFilter {
 
-    private static final String DEFAULT_MESSAGE_PARAM = "message";
 
     @Override
     protected boolean onLoginSuccess(AuthenticationToken token, Subject subject, ServletRequest request, ServletResponse response) throws Exception {
@@ -45,7 +42,7 @@ public class FormAuthenticationFilter extends org.apache.shiro.web.filter.authc.
             e.printStackTrace(); // 输出到控制台
         }
         request.setAttribute(getFailureKeyAttribute(), className);
-        request.setAttribute(DEFAULT_MESSAGE_PARAM, message);
+        request.setAttribute(Global.DEFAULT_MESSAGE_PARAM, message);
         return true;
     }
 

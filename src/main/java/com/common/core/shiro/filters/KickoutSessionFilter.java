@@ -1,5 +1,6 @@
-package com.common.core.filters;
+package com.common.core.shiro.filters;
 
+import com.common.config.Global;
 import com.common.core.shiro.SystemAuthorizingRealm;
 import com.google.common.collect.Lists;
 import org.apache.shiro.cache.Cache;
@@ -9,13 +10,11 @@ import org.apache.shiro.session.mgt.DefaultSessionKey;
 import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.AccessControlFilter;
-import org.apache.shiro.web.util.WebUtils;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import java.io.Serializable;
 import java.util.Deque;
-import java.util.LinkedList;
 
 /**
  * 登录踢出 filter 用这个 filter 需要在 ShiroConfiguration 类中加入 filter
@@ -107,8 +106,7 @@ public class KickoutSessionFilter extends AccessControlFilter{
                 subject.logout();
             } catch (Exception e) { //ignore
             }
-//            saveRequest(request);
-//            WebUtils.issueRedirect(request, response, getLoginUrl());
+//            request.setAttribute(Global.DEFAULT_MESSAGE_PARAM, "您的账号已在其它地方登录，请重新登录");
             saveRequestAndRedirectToLogin(request, response);
             return false;
         }

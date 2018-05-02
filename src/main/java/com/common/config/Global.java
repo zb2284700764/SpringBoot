@@ -46,6 +46,9 @@ public class Global {
     public static final String TRUE = "true";
     public static final String FALSE = "false";
 
+
+    public static final String DEFAULT_MESSAGE_PARAM = "message";
+
     static {
         System.out.println(System.getProperty("user.home") + File.separator + "application.properties");
         loader = new PropertiesLoader(System.getProperty("user.home") + File.separator + "application.properties");

@@ -1,6 +1,7 @@
 package com.common.core.shiro;
 
 import com.common.config.Global;
+import com.common.core.shiro.session.RedisSessionDao;
 import com.common.util.Encodes;
 import com.common.util.PasswordUtil;
 import com.google.common.collect.Lists;
@@ -15,6 +16,7 @@ import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
+import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 @Service
@@ -47,9 +50,9 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
 
         User user = userService.getByLoginName(usernamePasswordToken.getUsername());
         if (user == null) {
-            throw new AccountException("帐号或密码不正确！");
+            throw new AccountException("msg:帐号或密码不正确！");
         } else if (Global.NO.equals(user.getLoginFlag())) {
-            throw new DisabledAccountException("帐号已经禁止登录！");
+            throw new DisabledAccountException("msg:帐号已经禁止登录！");
         } else {
             // FIXME 更新登录时间 last login time
 
