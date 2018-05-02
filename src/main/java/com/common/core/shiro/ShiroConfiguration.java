@@ -3,6 +3,7 @@ package com.common.core.shiro;
 import com.common.core.filters.KickoutSessionFilter;
 import com.common.core.shiro.cache.RedisCacheManager;
 import com.common.core.shiro.session.RedisSessionDao;
+import com.common.core.shiro.session.ShiroSessionManager;
 import com.google.common.collect.Maps;
 import org.apache.shiro.cache.MemoryConstrainedCacheManager;
 import org.apache.shiro.codec.Base64;
@@ -72,7 +73,7 @@ public class ShiroConfiguration {
 
     @Bean(name = "sessionManager")
     public SessionManager sessionManager() {
-        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+        ShiroSessionManager sessionManager = new ShiroSessionManager();
         sessionManager.setSessionDAO(redisSessionDao());
         // session 失效时间(毫秒)
         sessionManager.setGlobalSessionTimeout(30 * 60 * 1000);
