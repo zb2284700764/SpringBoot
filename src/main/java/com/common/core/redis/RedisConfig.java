@@ -31,20 +31,6 @@ public class RedisConfig extends CachingConfigurerSupport {
     @Autowired
     private LettuceConnectionFactory lettuceConnectionFactory;
 
-//    @Bean
-//    public CacheManager cacheManager() {
-//
-//        RedisCacheManager.RedisCacheManagerBuilder builder = RedisCacheManager
-//                .RedisCacheManagerBuilder
-//                .fromConnectionFactory(lettuceConnectionFactory);
-////        Set<String> cacheNames = new HashSet<String>() {{
-////            add("codeNameCache");
-////        }};
-////        builder.initialCacheNames(cacheNames);
-//        return builder.build();
-//    }
-
-
 
     @Bean
     public RedisTemplate redisTemplate() {
@@ -74,23 +60,5 @@ public class RedisConfig extends CachingConfigurerSupport {
         template.afterPropertiesSet();
         return template;
     }
-
-//    @Override
-//    @Bean
-//    public KeyGenerator keyGenerator() {
-//        return new KeyGenerator() {
-//            @Override
-//            public Object generate(Object target, Method method, Object... params) {
-//                StringBuilder stringBuilder = new StringBuilder();
-//                stringBuilder.append(target.getClass().getName());
-//                stringBuilder.append(method.getName());
-//                for (Object object : params) {
-//                    stringBuilder.append(object.toString());
-//                }
-//                return stringBuilder.toString();
-//            }
-//
-//        };
-//    }
 
 }
