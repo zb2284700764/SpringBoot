@@ -58,6 +58,7 @@
                     <button id="addUserBtn" type="submit" class="btn btn-default">增加用户</button>
                 </form>
                 <button id="ajaxFindAllUser" type="button" class="btn btn-default">ajax 查询用户</button>
+                <button id="ajaxAddUser" type="button" class="btn btn-default">ajax 增加用户</button>
             </div>
 
             <div>
@@ -76,16 +77,34 @@
     </div>
 
     <script type="text/javascript" th:inline="javascript" data-layout-fragment="js">
-        $("#ajaxFindAllUser").click(function(){
-            alert("asdfasdf");
+        $(function () {
+            $("#ajaxFindAllUser").click(function(){
+                $.ajax({
+                    url:"/a/sys/user/ajaxFindAllUser",
+                    type:"post",
+                    dataType:"json",
+                    success:function(data){
+                        for(var i=0; i<data.length; i++){git
+                            var user = data[i];
+                            alert(user.loginName);
+                        }
+                    }
+                });
+            });
 
-            $.ajax({
-                url:"/a/sys/user/ajaxFindAllUser",
-                type:"post",
-                dataType:"json",
-                success:function(data){
-                    alert(data);
-                }
+            $("#ajaxAddUser").click(function(){
+
+                $.ajax({
+                    url:"/a/sys/user/save",
+                    type:"post",
+                    dataType:"json",
+                    success:function(data){
+                        AjaxError.unauthorized(data.code, data.message);
+                    },
+                    error:function(data){
+                        AjaxError.unauthorized(data.code, data.message);
+                    }
+                });
             });
         });
 

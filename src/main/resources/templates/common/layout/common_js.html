@@ -18,6 +18,15 @@
         <!-- Custom Theme JavaScript sb-admin 自己 js -->
         <script th:src="@{/sb-admin-2/js/sb-admin-2.min.js}"></script>
 
+        <!-- 自定义 AjaxError  js -->
+        <script th:src="@{/common/ajaxError.js}"></script>
+
+        <script type="text/javascript" th:inline="javascript">
+            // var url_403 = [[@{/common/error/403}]];
+            // var url_404 = [[@{/common/error/404}]];
+
+        </script>
+
     </th:block>
 
 </html>

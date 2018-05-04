@@ -206,11 +206,11 @@ public class ShiroConfiguration {
 
 
     /**
-     * 异常拦截并跳转到对应的界面
+     * 异常拦截并跳转到对应的界面，在 BaseController 统一处理
      *
      * @return
      */
-    @Bean
+//    @Bean
     public SimpleMappingExceptionResolver simpleMappingExceptionResolver() {
         SimpleMappingExceptionResolver simpleMappingExceptionResolver = new SimpleMappingExceptionResolver();
         Properties properties = new Properties();

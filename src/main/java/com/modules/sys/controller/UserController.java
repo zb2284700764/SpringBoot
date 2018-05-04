@@ -4,6 +4,7 @@ import com.common.controller.BaseController;
 import com.modules.sys.entity.User;
 import com.modules.sys.service.UserService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.apache.shiro.authz.annotation.RequiresUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,8 @@ public class UserController extends BaseController {
      * @param user
      * @return
      */
-    @RequiresPermissions("sys:user:view")
+    @RequiresUser
+    @RequiresPermissions("sys:user:add")
     @RequestMapping("/save")
     public String save(@ModelAttribute(value = "user") User user) {
 
