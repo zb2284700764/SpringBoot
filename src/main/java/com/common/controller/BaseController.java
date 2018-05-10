@@ -1,39 +1,43 @@
-/**
- * Copyright &copy; 2012-2014 <a href="https://github.com/thinkgem/jeesite">JeeSite</a> All rights reserved.
- */
 package com.common.controller;
 
+import com.common.core.shiro.SystemAuthorizingRealm;
 import com.common.mapper.JsonMapper;
 import com.google.common.collect.Maps;
-import org.apache.shiro.authc.AuthenticationException;
+import com.modules.sys.entity.Menu;
+import com.modules.sys.service.MenuService;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.AuthorizationException;
-import org.apache.shiro.authz.UnauthenticatedException;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.stereotype.Controller;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
- * 控制器支持类
+ * 控制器父类
  */
 public abstract class BaseController {
+
+    @Autowired
+    protected RedisTemplate redisTemplate;
+    @Autowired
+    protected MenuService menuService;
 
     /**
      * 日志对象
      */
-    protected Logger logger = LoggerFactory.getLogger(getClass());
+    public Logger logger = LoggerFactory.getLogger(getClass());
 
     /**
      * 管理基础路径
@@ -41,6 +45,23 @@ public abstract class BaseController {
     @Value("${adminPath}")
     protected String adminPath;
 
+
+    /**
+     * 查询菜单
+     * @param modelAndView 在当前 controller 里面只存放菜单数据
+     * @return 菜单数据
+     */
+    @ModelAttribute
+    public ModelAndView initMenu(ModelAndView modelAndView) {
+        SystemAuthorizingRealm.Principal principal = (SystemAuthorizingRealm.Principal) SecurityUtils.getSubject().getPrincipal();
+        if (principal != null) {
+            List<Menu> menuList = menuService.findMenuByUserId(principal.getId());
+            if (menuList != null) {
+                modelAndView.addObject("menuList",menuList);
+            }
+        }
+        return modelAndView;
+    }
 
 //    /**
 //     * 登录认证异常
@@ -74,8 +95,7 @@ public abstract class BaseController {
             writeJson(map, response);
             return null;
         } else {
-            ModelAndView modelAndView = new ModelAndView("/common/error/403");
-            return modelAndView;
+            return new ModelAndView("/common/error/403");
         }
     }
 
@@ -98,17 +118,12 @@ public abstract class BaseController {
 
     /**
      * 判断是否是 ajax 请求
-     *
-     * @param request
-     * @return
+     * @param request 请求
+     * @return 判断结果（true/false）
      */
     private static boolean isAjaxRequest(HttpServletRequest request) {
         String requestedWith = request.getHeader("x-requested-with");
-        if (requestedWith != null && requestedWith.equalsIgnoreCase("XMLHttpRequest")) {
-            return true;
-        } else {
-            return false;
-        }
+        return requestedWith != null && requestedWith.equalsIgnoreCase("XMLHttpRequest");
     }
 
 //    @RequestMapping("/common/error/403")

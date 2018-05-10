@@ -3,7 +3,7 @@
 <mapper namespace="com.modules.sys.dao.MenuDao">
     <resultMap id="BaseResultMap" type="Menu">
         <id column="id" property="id" jdbcType="VARCHAR"/>
-        <result column="parent_id" property="parent.id" jdbcType="VARCHAR"/>
+        <result column="parent_id" property="parentId" jdbcType="VARCHAR"/>
         <result column="parent_ids" property="parentIds" jdbcType="VARCHAR"/>
         <result column="name" property="name" jdbcType="VARCHAR"/>
         <result column="sort" property="sort" jdbcType="DECIMAL"/>
@@ -22,7 +22,7 @@
 
     <sql id="menuColumns">
         a.id AS 'id',
-        a.parent_id AS 'parent.id',
+        a.parent_id AS 'parentId',
         a.parent_ids AS 'parentIds',
         a.name AS 'name',
         a.sort AS 'sort',
@@ -60,7 +60,7 @@
             del_flag
         ) values (
             #{id},
-            #{parent.Id},
+            #{parentId},
             #{parentIds},
             #{name},
             #{sort},
@@ -89,6 +89,7 @@
         <where>
             sur.user_id = #{userId}
         </where>
+        order by a.id, a.sort
 
 
     </select>

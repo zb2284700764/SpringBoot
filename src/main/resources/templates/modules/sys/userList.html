@@ -42,17 +42,6 @@
                 </tr>
             </table>
 
-            <table class="table table-bordered">
-                <tr>
-                    <td>菜单</td>
-                </tr>
-                <tr th:each="menu,menuState : ${menuList}">
-                    <td>
-                        <a th:href="#" th:text="${menu.name}" ></a>
-                    </td>
-                </tr>
-            </table>
-
             <div>
                 <form th:action="@{/a/sys/user/gotoUserForm}" th:method="post">
                     <button id="addUserBtn" type="submit" class="btn btn-default">增加用户</button>
@@ -78,6 +67,7 @@
 
     <script type="text/javascript" th:inline="javascript" data-layout-fragment="js">
         $(function () {
+
             $("#ajaxFindAllUser").click(function(){
                 $.ajax({
                     url:"/a/sys/user/ajaxFindAllUser",

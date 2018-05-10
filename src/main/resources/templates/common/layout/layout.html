@@ -246,39 +246,55 @@
 
                     <!-- 菜单具体内容 -->
                     <ul class="nav" id="side-menu">
-                        <li>
-                            <a id="index" th:href="@{/a/index}"><i class="fa fa-dashboard fa-fw"></i> 首页</a>
+                        <!--<li>-->
+                            <!--<a id="index" th:href="@{/a/index}"><i class="fa fa-dashboard fa-fw"></i> 首页</a>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<a href="javascript:void(0);"><i class="fa fa-bar-chart-o fa-fw"></i> 系统管理<span class="fa arrow"></span></a>-->
+                            <!--<ul class="nav nav-second-level">-->
+                                <!--<li>-->
+                                    <!--<a th:href="@{/a/sys/user/findAllUser}">用户管理</a>-->
+                                <!--</li>-->
+                                <!--<li>-->
+                                    <!--<a th:href="@{/a/sys/role/findAllRole}">角色管理</a>-->
+                                <!--</li>-->
+                                <!--<li>-->
+                                    <!--<a th:href="@{/a/sys/menu/findAllMenu}">菜单管理</a>-->
+                                <!--</li>-->
+                            <!--</ul>-->
+                            <!--&lt;!&ndash; /.nav-second-level &ndash;&gt;-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<a href="javascript:void(0);"><i class="fa fa-table fa-fw"></i> Tables</a>-->
+                        <!--</li>-->
+                        <!--<li>-->
+                            <!--<a href="javascript:void(0);"><i class="fa fa-wrench fa-fw"></i> UI Elements<span class="fa arrow"></span></a>-->
+                            <!--<ul class="nav nav-second-level">-->
+                                <!--<li>-->
+                                    <!--<a href="javascript:void(0);">Panels and Wells</a>-->
+                                <!--</li>-->
+                                <!--<li>-->
+                                    <!--<a href="javascript:void(0);">Buttons</a>-->
+                                <!--</li>-->
+                            <!--</ul>-->
+                            <!--&lt;!&ndash; /.nav-second-level &ndash;&gt;-->
+                        <!--</li>-->
+
+                        <!-- 动态添加菜单 -->
+
+                        <!--<li th:each="menu,menuState : ${menuList}">-->
+                            <!--<a th:if="${#lists.isEmpty(menu.childMenus)}" th:href="@{${menu.href}}"><i th:if="${not #strings.isEmpty(menu.icon)}" th:class="${menu.icon}"></i><span th:text="${menu.name}"/></a>-->
+                            <!--<a th:if="${not #lists.isEmpty(menu.childMenus)}" href="javascript:void(0);"><i th:if="${not #strings.isEmpty(menu.icon)}" th:class="${menu.icon}"></i><span th:text="${menu.name}"/><span class="fa arrow"/></a>-->
+                            <!--<ul th:if="${not #lists.isEmpty(menu.childMenus)}" class="nav nav-second-level"  th:each="childMenu,childMenuState : ${menu.childMenus}">-->
+                                <!--<li>-->
+                                    <!--<a th:href="@{${childMenu.href}}" th:text="${childMenu.name}"></a>-->
+                                <!--</li>-->
+                            <!--</ul>-->
+                        <!--</li>-->
+
+                        <li th:replace="common/layout/menu :: menu(${menuList})">
                         </li>
-                        <li>
-                            <a href="javascript:void(0);"><i class="fa fa-bar-chart-o fa-fw"></i> 系统管理<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a th:href="@{/a/sys/user/findAllUser}">用户管理</a>
-                                </li>
-                                <li>
-                                    <a th:href="@{/a/sys/role/findAllRole}">角色管理</a>
-                                </li>
-                                <li>
-                                    <a th:href="@{/a/sys/menu/findAllMenu}">菜单管理</a>
-                                </li>
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
-                        <li>
-                            <a href="javascript:void(0);"><i class="fa fa-table fa-fw"></i> Tables</a>
-                        </li>
-                        <li>
-                            <a href="javascript:void(0);"><i class="fa fa-wrench fa-fw"></i> UI Elements<span class="fa arrow"></span></a>
-                            <ul class="nav nav-second-level">
-                                <li>
-                                    <a href="javascript:void(0);">Panels and Wells</a>
-                                </li>
-                                <li>
-                                    <a href="javascript:void(0);">Buttons</a>
-                                </li>
-                            </ul>
-                            <!-- /.nav-second-level -->
-                        </li>
+
                     </ul>
                 </div>
             </div>

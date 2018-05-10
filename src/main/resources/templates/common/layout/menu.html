@@ -1,10 +1,17 @@
 <!DOCTYPE html>
 <html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
 
-    <div th:fragment="menu">
-
-
-
-    </div>
+    <th:block th:fragment="menu(menuList)">
+        <li th:each="menu,menuState : ${menuList}">
+            <th:block th:if="${#lists.isEmpty(menu.childMenus)}">
+                <a th:id="${menu.id}" th:href="@{${menu.href}}"><i th:if="${not #strings.isEmpty(menu.icon)}" th:class="${menu.icon}"></i><span th:text="${menu.name}"/> </a>
+            </th:block>
+            <th:block th:if="${not #lists.isEmpty(menu.childMenus)}">
+                <a th:id="${menu.id}" href="javascript:void(0);"><i th:if="${not #strings.isEmpty(menu.icon)}" th:class="${menu.icon}"></i><span th:text="${menu.name}"/><span class="fa arrow"/></a>
+                <ul class="nav nav-second-level" th:include="common/layout/menu :: menu(${menu.childMenus})"></ul>
+            </th:block>
+        </li>
+    </th:block>
 
 </html>
+

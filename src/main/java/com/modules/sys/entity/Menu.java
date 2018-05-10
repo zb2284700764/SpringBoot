@@ -1,10 +1,13 @@
 package com.modules.sys.entity;
 
 import com.common.persistence.DataEntity;
+import com.google.common.collect.Lists;
+
+import java.util.List;
 
 public class Menu extends DataEntity<Menu> {
 
-    private Menu parent;    // 父级菜单
+    private String parentId;    // 父级菜单
     private String parentIds; // 所有父级编号
     private String name;    // 名称
     private String href;    // 链接
@@ -13,13 +16,15 @@ public class Menu extends DataEntity<Menu> {
     private Integer sort;    // 排序
     private String isShow;    // 是否在菜单中显示（1：显示；0：不显示）
     private String permission; // 权限标识
+    private List<Menu> childMenus; // 子菜单
 
-    public Menu getParent() {
-        return parent;
+
+    public String getParentId() {
+        return parentId;
     }
 
-    public void setParent(Menu parent) {
-        this.parent = parent;
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
     }
 
     public String getParentIds() {
@@ -84,5 +89,16 @@ public class Menu extends DataEntity<Menu> {
 
     public void setPermission(String permission) {
         this.permission = permission;
+    }
+
+    public List<Menu> getChildMenus() {
+        if (childMenus == null) {
+            childMenus = Lists.newLinkedList();
+        }
+        return childMenus;
+    }
+
+    public void setChildMenus(List<Menu> childMenus) {
+        this.childMenus = childMenus;
     }
 }

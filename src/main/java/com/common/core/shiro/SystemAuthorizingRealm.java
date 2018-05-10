@@ -4,6 +4,7 @@ import com.common.config.Global;
 import com.common.core.shiro.session.RedisSessionDao;
 import com.common.util.Encodes;
 import com.common.util.PasswordUtil;
+import com.common.util.StringUtils;
 import com.google.common.collect.Lists;
 import com.modules.sys.entity.Menu;
 import com.modules.sys.entity.Role;
@@ -92,18 +93,26 @@ public class SystemAuthorizingRealm extends AuthorizingRealm {
         }
         info.addRoles(rolesENname);
 
-        // 根据 userId 查询对应的菜单权限
+        // 根据 userId 查询对应的菜单和菜单的权限
         List<Menu> menus = menuService.findMenuByUserId(principal.getId());
         // 菜单权限集合
         List<String> permissions = Lists.newArrayList();
-        for(Menu menu : menus){
-            if (null != menu) {
-                permissions.add(menu.getPermission());
-            }
-        }
+        buildPermissions(menus, permissions);
         info.addStringPermissions(permissions);
 
         return info;
+    }
+
+    private void buildPermissions(List<Menu> menus, List<String> permissions) {
+        for(Menu menu : menus){
+            if (menu.getChildMenus() != null && menu.getChildMenus().size() > 0) {
+                buildPermissions(menu.getChildMenus(), permissions);
+            }
+
+            if (StringUtils.isNotBlank(menu.getPermission())) {
+                permissions.add(menu.getPermission());
+            }
+        }
     }
 
     /**
