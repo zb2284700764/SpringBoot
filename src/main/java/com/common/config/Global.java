@@ -46,8 +46,34 @@ public class Global {
     public static final String TRUE = "true";
     public static final String FALSE = "false";
 
-
+    /**
+     * 默认消息key
+     */
     public static final String DEFAULT_MESSAGE_PARAM = "message";
+
+//    /**
+//     * 用户缓存前缀
+//     */
+//    private static String REDIS_CACHE_PREFIX_USER_CACHE = "userCache:";
+
+    /**
+     * 获取菜单缓存的key
+     *
+     * @param key
+     * @return
+     */
+    public static String userCachePrefixMenus(String key) {
+        return userCachePrefix() + key + ":menus";
+    }
+
+    /**
+     * 获取用户缓存的前缀
+     * @return
+     */
+    public static String userCachePrefix() {
+
+        return "userCache:";
+    }
 
     static {
         System.out.println(System.getProperty("user.home") + File.separator + "application.properties");

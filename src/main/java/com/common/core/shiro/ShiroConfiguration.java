@@ -3,6 +3,7 @@ package com.common.core.shiro;
 import com.common.core.shiro.cache.RedisCacheManager;
 import com.common.core.shiro.filters.FormAuthenticationFilter;
 import com.common.core.shiro.filters.KickoutSessionFilter;
+import com.common.core.shiro.filters.LogoutFilter;
 import com.common.core.shiro.session.RedisSessionDao;
 import com.common.core.shiro.session.ShiroSessionManager;
 import com.google.common.collect.Maps;
@@ -185,6 +186,9 @@ public class ShiroConfiguration {
         kickoutSessionFilter.setSessionManager(sessionManager());
         kickoutSessionFilter.setCacheManager(redisCacheManager());
         filters.put("kickout", kickoutSessionFilter);
+//        LogoutFilter logoutFilter = new LogoutFilter();
+//        logoutFilter.setRedirectUrl("/a/cleanCache");
+//        filters.put("logout", logoutFilter);
         shiroFilterFactoryBean.setFilters(filters);
 
         // 没有权限默认跳转的页面
@@ -195,7 +199,7 @@ public class ShiroConfiguration {
 
         filterChainDefinitionMap.put("/static/**", "anon"); // anon 表示可以匿名访问
         filterChainDefinitionMap.put("/a/login", "authc"); // authc 表示需要认证才可以访问
-        filterChainDefinitionMap.put("/a/logout", "logout");
+//        filterChainDefinitionMap.put("/a/logout", "logout");
         filterChainDefinitionMap.put("/a/**", "user,kickout"); // user 用户拦截器 用户已经身份验证/记住我登录的都可
 //        filterChainDefinitionMap.put("/a/**", "user"); // user 用户拦截器 用户已经身份验证/记住我登录的都可
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);

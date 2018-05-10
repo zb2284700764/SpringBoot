@@ -1,6 +1,5 @@
 package com.common.core.shiro.filters;
 
-import com.common.config.Global;
 import com.common.core.shiro.SystemAuthorizingRealm;
 import com.google.common.collect.Lists;
 import org.apache.shiro.cache.Cache;

@@ -1,21 +1,27 @@
 package com.modules.sys.controller;
 
+import com.common.config.Global;
 import com.common.controller.BaseController;
-import com.google.common.collect.Lists;
-import com.modules.sys.entity.Menu;
+import com.common.core.shiro.SystemAuthorizingRealm;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * 后台登录 Controller
  */
 @Controller
 public class LoginController extends BaseController {
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     /**
      * 登录
@@ -31,14 +37,6 @@ public class LoginController extends BaseController {
         subject.getSession().getId();
         // 登录认证通过
         if (principal != null) {
-            // 查询菜单
-
-            List<Menu> menuList = Lists.newArrayList();
-            Menu menu = new Menu();
-            menu.setName("用户管理");
-            menuList.add(menu);
-            modelAndView.addObject("menuList", menuList);
-            modelAndView.setViewName("modules/index");
 
         } else {
             modelAndView.setViewName("modules/sys/login");
@@ -52,8 +50,20 @@ public class LoginController extends BaseController {
      *
      * @return
      */
-    @RequestMapping(value = "/")
-    public String login() {
+    @RequestMapping(value = "/a/logout")
+    public String logout() {
+
+        // 先清除这个用户的 userCache
+        Subject subject = SecurityUtils.getSubject();
+        SystemAuthorizingRealm.Principal principal = (SystemAuthorizingRealm.Principal) subject.getPrincipal();
+        if (principal != null) {
+            Set<String> sets = redisTemplate.keys(Global.userCachePrefix() + principal.getId() + "*");
+            for (String set : sets) {
+                redisTemplate.delete(set);
+            }
+        }
+
+        subject.logout();
 
         return "redirect:" + adminPath + "/login";
     }
@@ -63,10 +73,12 @@ public class LoginController extends BaseController {
      *
      * @date 2017年7月6日 上午10:21:20
      */
+    @RequiresPermissions("sys:index:view")
     @RequestMapping("${adminPath}/index")
-    public String defaultIndex() {
+    public ModelAndView defaultIndex(ModelAndView modelAndView) {
 
-        return "modules/index";
+        modelAndView.setViewName("modules/index");
+        return modelAndView;
     }
 
 }
