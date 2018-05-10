@@ -62,6 +62,8 @@ public class LoginController extends BaseController {
                 redisTemplate.delete(set);
             }
         }
+        // 删除登录踢出的标识
+        redisTemplate.delete("shiro-cache:shiro-kickout-session:" + principal.getLoginName());
 
         subject.logout();
 
@@ -76,7 +78,8 @@ public class LoginController extends BaseController {
     @RequiresPermissions("sys:index:view")
     @RequestMapping("${adminPath}/index")
     public ModelAndView defaultIndex(ModelAndView modelAndView) {
-
+        SystemAuthorizingRealm.Principal principal = (SystemAuthorizingRealm.Principal) SecurityUtils.getSubject().getPrincipal();
+        modelAndView.addObject("user", principal);
         modelAndView.setViewName("modules/index");
         return modelAndView;
     }
