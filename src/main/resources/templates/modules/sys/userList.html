@@ -48,6 +48,7 @@
                 </form>
                 <button id="ajaxFindAllUser" type="button" class="btn btn-default">ajax 查询用户</button>
                 <button id="ajaxAddUser" type="button" class="btn btn-default">ajax 增加用户</button>
+                <button id="sendMessage" type="button" class="btn btn-default">发送消息到 Redis 的消息队列</button>
             </div>
 
             <div>
@@ -74,7 +75,7 @@
                     type:"post",
                     dataType:"json",
                     success:function(data){
-                        for(var i=0; i<data.length; i++){git
+                        for(var i=0; i<data.length; i++){
                             var user = data[i];
                             alert(user.loginName);
                         }
@@ -83,7 +84,6 @@
             });
 
             $("#ajaxAddUser").click(function(){
-
                 $.ajax({
                     url:"/a/sys/user/save",
                     type:"post",
@@ -96,6 +96,17 @@
                     }
                 });
             });
+
+            $("#sendMessage").click(function () {
+                $.post(
+                    "/a/sys/user/sendMessage",
+                    function (data) {
+                        alert(data);
+                    },
+                    "json"
+                );
+            });
+
         });
 
     </script>

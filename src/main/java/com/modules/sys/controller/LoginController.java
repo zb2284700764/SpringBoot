@@ -78,8 +78,6 @@ public class LoginController extends BaseController {
     @RequiresPermissions("sys:index:view")
     @RequestMapping("${adminPath}/index")
     public ModelAndView defaultIndex(ModelAndView modelAndView) {
-        SystemAuthorizingRealm.Principal principal = (SystemAuthorizingRealm.Principal) SecurityUtils.getSubject().getPrincipal();
-        modelAndView.addObject("user", principal);
         modelAndView.setViewName("modules/index");
         return modelAndView;
     }

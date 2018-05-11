@@ -8,6 +8,7 @@ import org.apache.shiro.authz.annotation.RequiresUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,6 +23,8 @@ public class UserController extends BaseController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     @RequestMapping("/ajaxFindAllUser")
     @RequiresPermissions("sys:user:view")
@@ -78,5 +81,17 @@ public class UserController extends BaseController {
         modelAndView.addObject("userList", userList);
         modelAndView.setViewName("modules/sys/userList");
         return modelAndView;
+    }
+
+    /**
+     * 发送消息到 Redis 的消息队列中
+     * @return
+     */
+    @RequestMapping("/sendMessage")
+    public boolean sendMessage() {
+
+        redisTemplate.convertAndSend("testTopic", "测试消息");
+
+        return true;
     }
 }

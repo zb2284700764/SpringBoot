@@ -55,6 +55,7 @@ public abstract class BaseController {
     public ModelAndView initMenu(ModelAndView modelAndView) {
         SystemAuthorizingRealm.Principal principal = (SystemAuthorizingRealm.Principal) SecurityUtils.getSubject().getPrincipal();
         if (principal != null) {
+            modelAndView.addObject("user", principal);
             List<Menu> menuList = menuService.findMenuByUserId(principal.getId());
             if (menuList != null) {
                 modelAndView.addObject("menuList",menuList);
