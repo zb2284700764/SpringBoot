@@ -11,6 +11,12 @@ import java.io.Serializable;
 
 public class ShiroSessionManager extends DefaultWebSessionManager {
 
+    /**
+     * 优化单次请求需要多次访问redis的问题
+     * @param sessionKey
+     * @return
+     * @throws UnknownSessionException
+     */
     @Override
     protected Session retrieveSession(SessionKey sessionKey) throws UnknownSessionException {
         Serializable sessionId = getSessionId(sessionKey);
