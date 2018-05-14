@@ -56,6 +56,28 @@ public class Global {
 //     */
 //    private static String REDIS_CACHE_PREFIX_USER_CACHE = "userCache:";
 
+
+    /**
+     * 记住我
+     */
+    public static String REMEMBER__ME = "rememberMe";
+
+    /**
+     * 记住我的加密密匙
+     */
+    public static String REMEMBER_ME_KEY = "DoHkenUvfszBE0/Z017AHw==";
+
+    /**
+     * Redis 中 Shiro 的统一前缀
+     */
+    public static String SHIRO_CACHE = "shiro-cache:";
+
+    /**
+     * 活动的 session 前缀
+     */
+    public static  String ACTIVE_SESSION_CACHE_PREFIXX = "shiro-activeSessionCache";
+
+
     /**
      * 获取菜单缓存的key
      *

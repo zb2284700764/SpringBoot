@@ -1,5 +1,6 @@
 package com.common.core.shiro;
 
+import com.common.config.Global;
 import com.common.core.shiro.cache.RedisCacheManager;
 import com.common.core.shiro.filters.FormAuthenticationFilter;
 import com.common.core.shiro.filters.KickoutSessionFilter;
@@ -17,6 +18,7 @@ import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -46,7 +48,7 @@ public class ShiroConfiguration {
 
 
     @Bean(name = "sessionIdGenerator")
-    public JavaUuidSessionIdGenerator sessionIdGenerator(){
+    public JavaUuidSessionIdGenerator sessionIdGenerator() {
         JavaUuidSessionIdGenerator sessionIdGenerator = new JavaUuidSessionIdGenerator();
         return sessionIdGenerator;
     }
@@ -56,7 +58,7 @@ public class ShiroConfiguration {
     public RedisSessionDao redisSessionDao() {
         RedisSessionDao redisSessionDao = new RedisSessionDao();
         redisSessionDao.setSessionIdGenerator(sessionIdGenerator());
-        redisSessionDao.setActiveSessionsCacheName("shiro-activeSessionCache");
+        redisSessionDao.setActiveSessionsCacheName(Global.ACTIVE_SESSION_CACHE_PREFIXX);
         redisSessionDao.setCacheManager(redisCacheManager());
         return redisSessionDao;
     }
@@ -70,7 +72,9 @@ public class ShiroConfiguration {
 
     @Bean(name = "sessionManager")
     public SessionManager sessionManager() {
-        ShiroSessionManager sessionManager = new ShiroSessionManager();
+
+        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+//        ShiroSessionManager sessionManager = new ShiroSessionManager();
         sessionManager.setSessionDAO(redisSessionDao());
         // session 失效时间(毫秒)
         sessionManager.setGlobalSessionTimeout(30 * 60 * 1000);
@@ -86,7 +90,7 @@ public class ShiroConfiguration {
     @Bean
     public SimpleCookie rememberMeCookie() {
         // 这个参数是cookie的名称，对应前端的checkbox的name = rememberMe
-        SimpleCookie cookie = new SimpleCookie("rememberMe");
+        SimpleCookie cookie = new SimpleCookie(Global.REMEMBER__ME);
         // cookie 生效时间 30 天，单位(秒)
         cookie.setMaxAge(30 * 24 * 60 * 60);
         return cookie;
@@ -97,7 +101,7 @@ public class ShiroConfiguration {
         CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
         cookieRememberMeManager.setCookie(rememberMeCookie());
         // 设置 rememberMe cookie 加密的密匙，默认AES算法 密钥长度(128 256 512 位)
-        cookieRememberMeManager.setCipherKey(Base64.decode("DoHkenUvfszBE0/Z017AHw=="));
+        cookieRememberMeManager.setCipherKey(Base64.decode(Global.REMEMBER_ME_KEY));
         return cookieRememberMeManager;
     }
 
@@ -141,6 +145,7 @@ public class ShiroConfiguration {
         authorizationAttributeSourceAdvisor.setSecurityManager(securityManager);
         return authorizationAttributeSourceAdvisor;
     }
+
     /**
      * DefaultAdvisorAutoProxyCreator，Spring的一个bean，由 Advisor 决定对哪些类的方法进行AOP代理
      * AOP式方法级权限检查
@@ -155,6 +160,7 @@ public class ShiroConfiguration {
 
     /**
      * 自定义实现 FormAuthenticationFilter 这个 Filter 之后，需要加入让自定义的 Filter 在 Shiro 的 Filter 加载之后再加载
+     *
      * @param filter
      * @return
      */
@@ -179,7 +185,7 @@ public class ShiroConfiguration {
 
         // 登录成功默认跳转页面，不配置则跳转至”/”。如果登陆前点击的一个需要登录的页面，则在登录自动跳转到那个需要登录的页面。不跳转到此
         shiroFilterFactoryBean.setSuccessUrl("/a/index");
-        Map<String,Filter> filters = shiroFilterFactoryBean.getFilters();
+        Map<String, Filter> filters = shiroFilterFactoryBean.getFilters();
         filters.put("authc", new FormAuthenticationFilter());
         KickoutSessionFilter kickoutSessionFilter = new KickoutSessionFilter();
         kickoutSessionFilter.setMaxSession(1);
@@ -206,7 +212,6 @@ public class ShiroConfiguration {
 
         return shiroFilterFactoryBean;
     }
-
 
 
     /**
