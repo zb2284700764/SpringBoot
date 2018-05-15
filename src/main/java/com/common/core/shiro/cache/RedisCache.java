@@ -1,5 +1,6 @@
 package com.common.core.shiro.cache;
 
+import com.common.config.Global;
 import com.google.common.collect.Lists;
 import org.apache.shiro.cache.Cache;
 import org.apache.shiro.cache.CacheException;
@@ -22,7 +23,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
 
 
     RedisCache(String cacheKey, RedisTemplate redisTemplate) {
-        this.cacheKey = "shiro-cache:" + cacheKey + ":";
+        this.cacheKey = Global.SHIRO_CACHE + cacheKey + ":";
         this.redisTemplate = redisTemplate;
     }
 
@@ -34,6 +35,10 @@ public class RedisCache<K, V> implements Cache<K, V> {
 
         // 对应的 cache key 设置失效时间
 //        redisTemplate.boundValueOps(getCacheKey(k)).expire(1800, TimeUnit.SECONDS);
+
+
+//        System.out.println("RedisCache get() ---------------------------->" + k);
+
         // 获取对应 key 的值，以绑定指定key的方式，操作具有简单值的条目
         return redisTemplate.boundValueOps(getCacheKey(k)).get();
     }
@@ -43,6 +48,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
         if (k == null) {
             return null;
         }
+//        System.out.println("RedisCache put() ---------------------------->" + k);
 
         redisTemplate.boundValueOps(getCacheKey(k)).set(v);
         return v;
@@ -50,6 +56,7 @@ public class RedisCache<K, V> implements Cache<K, V> {
 
     @Override
     public V remove(K k) throws CacheException {
+//        System.out.println("RedisCache remove() ---------------------------->" + k);
         V old = get(k);
         redisTemplate.delete(getCacheKey(k));
         return old;
