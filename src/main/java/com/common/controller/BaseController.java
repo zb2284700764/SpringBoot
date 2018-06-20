@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -96,7 +97,7 @@ public abstract class BaseController {
             writeJson(map, response);
             return null;
         } else {
-            return new ModelAndView("/common/error/403");
+            return new ModelAndView("redirect:/common/error/403");
         }
     }
 
@@ -127,12 +128,12 @@ public abstract class BaseController {
         return requestedWith != null && requestedWith.equalsIgnoreCase("XMLHttpRequest");
     }
 
-//    @RequestMapping("/common/error/403")
-//    public ModelAndView error403(ModelAndView modelAndView){
-//        modelAndView.setViewName("/common/error/403");
-//        return modelAndView;
-//    }
-//
+    @RequestMapping("/common/error/403")
+    public ModelAndView error403(ModelAndView modelAndView){
+        modelAndView.setViewName("/common/error/403");
+        return modelAndView;
+    }
+
 //    @RequestMapping("/common/error/404")
 //    public ModelAndView error404(ModelAndView modelAndView){
 //        modelAndView.setViewName("/common/error/404");
