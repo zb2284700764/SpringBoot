@@ -14,16 +14,10 @@ import java.util.List;
 @RequestMapping("${adminPath}/sys/menu")
 public class MenuController extends BaseController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MenuController.class);
 
+    @RequestMapping("/list")
+    public String list(String userId) {
 
-
-    @RequestMapping("/findMenuByUser")
-    public List<Menu> findMenuByUser(String userId) {
-        System.out.println("进来查询菜单");
-        List<Menu> menuList = Lists.newArrayList();
-        menuList.add(new Menu());
-
-        return menuList;
+        return null;
     }
 }

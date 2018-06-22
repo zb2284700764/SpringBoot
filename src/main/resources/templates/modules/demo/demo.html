@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org"
+      data-layout-decorator="common/layout/layout">
+<head>
+    <title>用户列表</title>
+</head>
+
+<body>
+
+    <!-- data-layout-fragment="content" 标签内的内容会替换 layout 页面中 data-layout-fragment="content" 面的内容 -->
+    <div data-layout-fragment="content">
+        <div class="container-fluid">
+
+            <h4>标题</h4>
+
+            <div id="app">
+                Vue 加载message: {{message}}
+            </div>
+
+
+
+            <div>
+                <button type="button" class="btn btn-default">Default</button>
+                <button type="button" class="btn btn-primary btn-xs">Primary</button>
+                <button type="button" class="btn btn-success btn-sm">Success</button>
+                <button type="button" class="btn btn-info btn-lg">Info</button>
+                <button type="button" class="btn btn-warning">Warning</button>
+                <button type="button" class="btn btn-danger">Danger</button>
+                <button type="button" class="btn btn-link">Link</button>
+                <button type="button" class="btn btn-primary" disabled="disabled">Primary button</button>
+                <button type="button" class="btn btn-default" disabled="disabled">Button</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- data-layout-fragment="js" 标签内的内容会替换 layout 页面中 data-layout-fragment="js" 的内容 -->
+    <script type="text/javascript" th:inline="javascript" data-layout-fragment="js">
+        $(function () {
+
+           var app = new Vue({
+               el:"#app",
+               data:{
+                   message:"Hello Vue!"
+               }
+           });
+
+        });
+
+    </script>
+</body>
+</html>

@@ -30,6 +30,8 @@ import java.util.Map;
  */
 public abstract class BaseController {
 
+    public static final Logger LOGGER = LoggerFactory.getLogger(BaseController.class);
+
     @Autowired
     protected RedisTemplate redisTemplate;
     @Autowired
@@ -48,7 +50,7 @@ public abstract class BaseController {
 
 
     /**
-     * 查询菜单
+     * 查询菜单, 每次请求都会查询一次
      * @param modelAndView 在当前 controller 里面只存放菜单数据
      * @return 菜单数据
      */

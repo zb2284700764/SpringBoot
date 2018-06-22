@@ -304,7 +304,7 @@
 
         <!-- 主体内容，各个子页面自己实现 -->
         <div id="page-wrapper">
-            <!-- data-layout-fragment="content" 标签之外的内容显示在首页上，标签内的内容不会显示 -->
+            <!-- data-layout-fragment="content" 标签之外的内容显示在首页上, 标签内的内容不会显示, 需要各个页面自己实现 -->
             <div data-layout-fragment="content">
 
             </div>
@@ -313,6 +313,7 @@
 
     <!-- 页尾引入 common_js -->
     <th:block th:include ="common/layout/common_js :: js" />
+    <!-- data-layout-fragment="js" 标签之外的内容显示在首页上, 标签内的内容不会显示, 需要各个页面自己实现 -->
     <script type="text/javascript" th:inline="javascript" data-layout-fragment="js"></script>
 
 </body>

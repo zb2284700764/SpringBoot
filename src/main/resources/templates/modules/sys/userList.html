@@ -7,6 +7,7 @@
 
 <body>
 
+    <!-- data-layout-fragment="content" 标签内的内容会替换 layout 页面中 data-layout-fragment="content" 面的内容 -->
     <div data-layout-fragment="content">
         <div class="container-fluid">
 
@@ -45,27 +46,15 @@
             <div>
                 <form th:action="@{/a/sys/user/gotoUserForm}" th:method="post">
                     <button id="addUserBtn" type="submit" class="btn btn-default">增加用户</button>
+                    <button id="ajaxFindAllUser" type="button" class="btn btn-default">ajax 查询用户</button>
+                    <button id="ajaxAddUser" type="button" class="btn btn-default">ajax 增加用户</button>
+                    <button id="sendMessage" type="button" class="btn btn-default">发送消息到 Redis 的消息队列</button>
                 </form>
-                <button id="ajaxFindAllUser" type="button" class="btn btn-default">ajax 查询用户</button>
-                <button id="ajaxAddUser" type="button" class="btn btn-default">ajax 增加用户</button>
-                <button id="sendMessage" type="button" class="btn btn-default">发送消息到 Redis 的消息队列</button>
             </div>
-
-            <div>
-                <button type="button" class="btn btn-default">Default</button>
-                <button type="button" class="btn btn-primary btn-xs">Primary</button>
-                <button type="button" class="btn btn-success btn-sm">Success</button>
-                <button type="button" class="btn btn-info btn-lg">Info</button>
-                <button type="button" class="btn btn-warning">Warning</button>
-                <button type="button" class="btn btn-danger">Danger</button>
-                <button type="button" class="btn btn-link">Link</button>
-                <button type="button" class="btn btn-primary" disabled="disabled">Primary button</button>
-                <button type="button" class="btn btn-default" disabled="disabled">Button</button>
-            </div>
-
         </div>
     </div>
 
+    <!-- data-layout-fragment="js" 标签内的内容会替换 layout 页面中 data-layout-fragment="js" 的内容 -->
     <script type="text/javascript" th:inline="javascript" data-layout-fragment="js">
         $(function () {
 

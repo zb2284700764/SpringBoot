@@ -19,8 +19,6 @@ import java.util.List;
 @RequestMapping("${adminPath}/sys/user")
 public class UserController extends BaseController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
-
     @Autowired
     private UserService userService;
     @Autowired
@@ -75,8 +73,8 @@ public class UserController extends BaseController {
      * @date 2017年9月18日 下午5:20:40
      */
     @RequiresPermissions("sys:user:view")
-    @RequestMapping("/findAllUser")
-    public ModelAndView findAllUser(ModelAndView modelAndView) {
+    @RequestMapping("/list")
+    public ModelAndView list(ModelAndView modelAndView) {
         List<User> userList = userService.findAllUser();
         modelAndView.addObject("userList", userList);
         modelAndView.setViewName("modules/sys/userList");
