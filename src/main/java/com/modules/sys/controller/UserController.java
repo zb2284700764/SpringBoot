@@ -39,7 +39,7 @@ public class UserController extends BaseController {
      * @return
      */
     @RequiresUser
-    @RequiresPermissions("sys:user:add")
+    @RequiresPermissions("？")
     @RequestMapping("/save")
     public String save(@ModelAttribute(value = "user") User user) {
 
@@ -54,7 +54,7 @@ public class UserController extends BaseController {
      *
      * @date 2017年9月19日 下午2:20:59
      */
-    @RequiresPermissions("sys:user:add")
+//    @RequiresPermissions("sys:user:edit")
     @RequestMapping("/gotoUserForm")
     public ModelAndView gotoUserForm(ModelAndView modelAndView) {
 

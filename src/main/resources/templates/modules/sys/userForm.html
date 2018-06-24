@@ -1,13 +1,10 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org"
+      data-layout-decorator="common/layout/layout">
 <head>
-    <title>Hello</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>增加用户</title>
 
-    <!-- Jquery -->
-    <script th:src="@{/jquery/1.12/jquery-1.12.4.js}"></script>
-
-    <script type="text/javascript">
+    <script type="text/javascript" th:inline="javascript" data-layout-fragment="js">
         $(function () {
             $("#saveBtn").click(function () {
                 $("#saveForm").submit();
@@ -22,20 +19,21 @@
 
 </head>
 <body>
-<form id="saveForm" th:action="@{/a/sys/user/save}" th:method="post" th:object="${user}">
-    登录名：<input type="text" th:field="*{loginName}"/><br/>
-    密码：<input type="password" th:field="*{password}"/><br/>
-    姓名：<input type="text" th:field="*{name}"/><br/>
 
-    <button id="saveBtn" type="button" class="btn btn-default">保存</button>
-</form>
-<form id="saveForm1" th:action="@{/a/sys/user/save}" th:method="post" >
-    登录名：<input type="text" name="loginName"/><br/>
-    密码：<input type="password" name="password"/><br/>
-    姓名：<input type="text" name="name"/><br/>
-
-
-    <button id="saveBtn1" type="button" class="btn btn-default">保存</button>
-</form>
+<!-- data-layout-fragment="content" 标签内的内容会替换 layout 页面中 data-layout-fragment="content" 面的内容 -->
+    <div data-layout-fragment="content">
+        <form id="saveForm" th:action="@{/a/sys/user/save}" th:method="post" th:object="${user}">
+            登录名：<input type="text" th:field="*{loginName}"/><br/>
+            密码：<input type="password" th:field="*{password}"/><br/>
+            姓名：<input type="text" th:field="*{name}"/><br/>
+            <button id="saveBtn" type="button" class="btn btn-default">保存</button>
+        </form>
+        <form id="saveForm1" th:action="@{/a/sys/user/save}" th:method="post" >
+            登录名：<input type="text" name="loginName"/><br/>
+            密码：<input type="password" name="password"/><br/>
+            姓名：<input type="text" name="name"/><br/>
+            <button id="saveBtn1" type="button" class="btn btn-default">保存</button>
+        </form>
+    </div>
 </body>
 </html>

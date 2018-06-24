@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh-CN" xmlns:th="http://www.thymeleaf.org"
-      data-layout-decorator="common/layout/layout">
+      data-layout-decorator="common/layout/layout" xmlns:v-bind="http://www.w3.org/1999/xhtml">
 <head>
     <title>用户列表</title>
 </head>
@@ -15,6 +15,13 @@
 
             <div id="app">
                 Vue 加载message: {{message}}
+            </div>
+
+            <div id="app-2">
+                <span v-bind:title="message">
+                    鼠标悬停几秒钟查看此处动态绑定的提示信息！
+                </span>
+
             </div>
 
 
@@ -42,6 +49,13 @@
                el:"#app",
                data:{
                    message:"Hello Vue!"
+               }
+           });
+
+           var app2 = new Vue({
+               el:"#app-2",
+               data:{
+                   message:'页面加载于 ' + new Date().toLocaleString()
                }
            });
 
